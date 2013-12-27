@@ -1,0 +1,18 @@
+{
+  "name": "node-kx3",
+  "version": "0.0.0",
+  "description": "A node module to control the Elecraft KX3 tranciever.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "elecraft",
+    "kx3"
+  ],
+  "dependencies": {
+    "serialport": "*"
+  },
+  "author": "S. Mikkel Wilson",
+  "license": "BSD-2-Clause"
+}
