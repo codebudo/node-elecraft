@@ -4,22 +4,21 @@
 var SerialPort   = require('serialport');
 var util         = require('util');
 var EventEmitter = require('events').EventEmitter;
-var logger       = require('./logger.js');
-logger.set(logger.DEBUG);
-var log = logger.log;
+var log       = require('./logger.js');
+log.set(log.DEBUG);
 
 // configs
 var serialPortName = "/dev/cu.usbserial-A501XQ4S";
 
-log(logger.DEBUG, "Starting...");
+log.info("Starting...");
 
 function Elecraft(){
   function list(){
-    log(logger.DEBUG, "Listing available ports");
+    log.debug("Listing available ports");
     SerialPort.list(function(err,ports){
       ports.forEach(function(port){
-        //log(logger.DEBUG, port);
-        log(logger.DEBUG, port.comName + ", " +port.pnpId+", "+port.manufacturer);
+        //log.debug(port);
+        log.debug(port.comName + ", " +port.pnpId+", "+port.manufacturer);
       });
     });
   }
@@ -37,13 +36,13 @@ function Elecraft(){
   }
 
   function connect(){
-    log(logger.DEBUG, "Connecting...");
+    log.debug("Connecting...");
     var SP = SerialPort.SerialPort;
 
     /*if( validatePort(serialPortName) ){
-      log(logger.DEBUG, "Found port " + serialPortName);
+      log.debug("Found port " + serialPortName);
     } else {
-      log(logger.ERROR, "Port not found. Exiting.");
+      log.debug("Port not found. Exiting.");
       process.exit(); 
     }*/
     
@@ -53,7 +52,7 @@ function Elecraft(){
 
     kx3.on('open', function(){
       var buffer = '';
-      log(logger.INFO, 'open');
+      log.info('open');
       kx3.on('data', function(data){
         log.trace("data: "+data);
         //console.log( "data: "+data );
@@ -70,10 +69,10 @@ function Elecraft(){
 
       kx3.write('AI;', function(err,results){
         if( err ){
-          log(logger.ERROR, "err "+err);
+          log.error("err "+err);
         }
         if( results ){
-          log(logger.INFO, "resutls "+results);
+          log.info("resutls "+results);
         }
       });
     });
@@ -82,11 +81,11 @@ function Elecraft(){
   }
 
   function processCommand(cmd){
-    log(logger.INFO, '>'+cmd);
+    log.info('>'+cmd);
 
     var three = cmd.substr(0,3);
-    log(logger.DEBUG, commands[three]);
-    log(logger.DEBUG, commands[cmd.substr(0,2)]);
+    log.debug(commands[three]);
+    log.debug(commands[cmd.substr(0,2)]);
   }
 
   var commands = {
@@ -201,7 +200,7 @@ function Elecraft(){
   return exports;
 
   console.log( exports);
-  log(logger.DEBUG, exports);
+  log.debug(exports);
 }
 
 Elecraft().list();

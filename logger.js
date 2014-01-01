@@ -19,25 +19,25 @@ var exports = {
     currentLevel = level;
   },
   trace: function(message){
-    log(logger.TRACE, message)
+    logger(this.TRACE, message)
   },
   debug: function(message){
-    log(logger.DEBUG, message)
+    logger(this.DEBUG, message)
   },
   info: function(message){
-    log(logger.INFO, message)
+    logger(this.INFO, message)
   },
   warn: function(message){
-    log(logger.WARN, message)
+    logger(this.WARN, message)
   },
   error: function(message){
-    log(logger.ERROR, message)
+    logger(this.ERROR, message)
   },
   severe: function(message){
-    log(logger.severe, message)
+    logger(this.severe, message)
   },
   log: logger
 }
 
-currentLevel = logger.DEBUG; // default to DEBUG
+currentLevel = exports.DEBUG; // default to DEBUG
 module.exports = exports;
