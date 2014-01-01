@@ -55,7 +55,7 @@ function Elecraft(){
       var buffer = '';
       log(logger.INFO, 'open');
       kx3.on('data', function(data){
-        log(logger.TRACE, "data: "+data );
+        log.trace("data: "+data);
         //console.log( "data: "+data );
         if( data != undefined )
           buffer += data;
