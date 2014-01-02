@@ -13,6 +13,8 @@ var serialPortName = "/dev/cu.usbserial-A501XQ4S";
 log.info("Starting...");
 
 function Elecraft(){
+  var self = this;
+
   function list(){
     log.debug("Listing available ports");
     SerialPort.list(function(err,ports){
@@ -39,6 +41,7 @@ function Elecraft(){
     log.debug("Connecting...");
     var SP = SerialPort.SerialPort;
 
+    // TODO fix async validation. Bypass for now.
     /*if( validatePort(serialPortName) ){
       log.debug("Found port " + serialPortName);
     } else {
@@ -67,7 +70,7 @@ function Elecraft(){
 
       });
 
-      kx3.write('AI;', function(err,results){
+      kx3.write('AI1;', function(err,results){
         if( err ){
           log.error("err "+err);
         }
@@ -80,12 +83,26 @@ function Elecraft(){
     kx3.open();
   }
 
-  function processCommand(cmd){
-    log.info('>'+cmd);
 
-    var three = cmd.substr(0,3);
-    log.debug(commands[three]);
-    log.debug(commands[cmd.substr(0,2)]);
+  function processCommand(cmd){
+    log.debug('>'+cmd);
+
+    var three = commands[cmd.substr(0,3)];
+    var two   = commands[cmd.substr(0,2)];
+    var one   = commands[cmd.substr(0,1)];
+
+    if(commands[cmd.substr(0,3)] != undefined ){
+      log.debug(commands[cmd.substr(0,3)]);
+      //self.emit(cmd.substr(0,3), cmd.substring(3));
+    } else 
+    if(commands[cmd.substr(0,2)] !== undefined ){
+      log.debug(commands[cmd.substr(0,2)]);
+      //self.emit(cmd.substr(0,2), cmd.substring(2));
+    } else 
+    if(commands[cmd.substr(0,1)] !== undefined ){
+      log.debug(commands[cmd.substr(0,1)]);
+      //self.emit(cmd.substr(0,1), cmd.substring(1));
+    }
   }
 
   var commands = {
@@ -203,9 +220,11 @@ function Elecraft(){
   log.debug(exports);
 }
 
-Elecraft().list();
-Elecraft().connect();
 
 util.inherits(Elecraft, EventEmitter);
+
 module.exports = new Elecraft();
+
+//Elecraft().list();
+Elecraft().connect();
 
