@@ -14,8 +14,10 @@ log.info("Starting...");
 
 function Elecraft(){
   var self = this;
+  EventEmitter.call(this);
 
-  function list(){
+
+  this.list = function(){
     log.debug("Listing available ports");
     SerialPort.list(function(err,ports){
       ports.forEach(function(port){
@@ -37,7 +39,7 @@ function Elecraft(){
     });
   }
 
-  function connect(){
+  this.connect = function(){
     log.debug("Connecting...");
     var SP = SerialPort.SerialPort;
 
@@ -93,15 +95,15 @@ function Elecraft(){
 
     if(commands[cmd.substr(0,3)] != undefined ){
       log.debug(commands[cmd.substr(0,3)]);
-      //self.emit(cmd.substr(0,3), cmd.substring(3));
+      self.emit(cmd.substr(0,3), cmd.substring(3));
     } else 
     if(commands[cmd.substr(0,2)] !== undefined ){
       log.debug(commands[cmd.substr(0,2)]);
-      //self.emit(cmd.substr(0,2), cmd.substring(2));
+      self.emit(cmd.substr(0,2), cmd.substring(2));
     } else 
     if(commands[cmd.substr(0,1)] !== undefined ){
       log.debug(commands[cmd.substr(0,1)]);
-      //self.emit(cmd.substr(0,1), cmd.substring(1));
+      self.emit(cmd.substr(0,1), cmd.substring(1));
     }
   }
 
@@ -208,23 +210,22 @@ function Elecraft(){
     'XT':   'XIT on/off' 
   }
 
-  exports =  {
-    connect:  connect,
-    commands: commands,
-    list:     list
-  }
-
-  return exports;
-
-  console.log( exports);
-  log.debug(exports);
+  //log.debug(exports);
+  //return exports;
 }
 
-
 util.inherits(Elecraft, EventEmitter);
+//log.debug(foo.prototype);
+//log.debug(foo.super_);
+//log.debug(foo instanceof EventEmitter);
+
 
 module.exports = new Elecraft();
 
-//Elecraft().list();
-Elecraft().connect();
+// TODO move tests to another file
+var foo = new Elecraft();
+foo.list();
+foo.connect();
+foo.on('IF', function(){log.debug("got IF event");});
+
 
