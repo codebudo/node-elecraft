@@ -125,125 +125,330 @@ function Elecraft(){
   }
 
   var commands = {
-    "?":   {name:"busy",
-            description: "busy"},
-    "AG":  {name:"AFGainVFOA",
-            parser: function(e){e.AFGainVFOA=parseInt(e.data)},
-            description: "AF gain VFO-A"},
-    "AG$": {name:"AFGainVFOB",
-            parser: function(e){e.AFGainVFOB=parseInt(e.data)},
-            description: "AF gain VFO-B"},
-    "AI":  {name:"AutoInfoModeOn",
-            parser: function(data){
-              if( data == 0 )
-                return false
-              if( data == 1 )
-                return true;
-              return data;
-            },
-            description: "Auto-Info mode"},
-    "AK":   "Internal Use Only",
-    "AN":   "Antenna Selection",
-    "BC":   "Interal Use Only",
-    "BG":   "Bargraph read",
-    "BN":   "Band Number VFO-A",
-    "BN$":  "Band Number VFO-B",
-    "BR":   "Baud rate set",
-    "BW":   "Filter Bandwidth VFO-A",
-    "BW$":  "Filter Bandwidth VFO-B",
-    "CP":   "Speech compression",
-    "CW":   "CW sidetone pitch",
-    "DB":   "VFO-B text",
-    "DL":   "DSP command trace",
-    "DM":   "Internal Use Only",
-    "DN":   "Frequency Down VFO-A",
-    "DNB":  "Frequency Down VFO-B",
-    "DS":   "VGO-A text/icons", // TODO build/return state object
-    "DT":   "Data sub-mode",
-    "DV":   "Diversity mode", 
-    "EL":   "Error logging on/off", 
-    "ES":   "ESSB mode", 
-    "EW":   "Internal Use Only", 
-    "FA":   "VFO-A Frequency", 
-    "FB":   "VFO-B Frequency", 
-    "FI":   "I.F. center frequency", 
-    "FN":   "Interal Use Only", 
-    "FR":   "Receive VFO select", 
-    "FT":   "Transmit VFO select", 
-    "FW":   "Filter bandwidth and # VFO-A", // deprecated. Use BW.
-    "FW$":  "Filter bandwidth and # VFO-B", // deprecated. Use BW.
-    "GT":   "AGC speed on/off", 
-    "IC":   "Icon and misc. status", 
-    "ID":   "Radio identification", 
-    "IF":  {name:"GeneralInformation",
-            parser: function(e){
-              log.debug( "code "+ e.description );
-              e.frequencyVFOA=14.268000;
-              e.frequencyVFOB=14.268500;
-            },
-            description: "General information"}, 
-    "IO":   "Internal Use Only", 
-    "IS":   "IF shift", 
-    "K2":   "K2 command mode", 
-    "K3":   "K3 command mode", 
-    "KS":   "Keyer speed", 
-    "KT":   "Internal Use Only", 
-    "KY":   "Keyboard CW/DATA", 
-    "LD":   "Internal Use Only", 
-    "LK":   "VFO-A Lock", 
-    "LK$":  "VFO-B Lock", 
-    "LN":   "Link VFOs", 
-    "MC":   "Memory channel", 
-    "MD":   "Operating Mode VFO-A", 
-    "MD$":  "Operating Mode VFO-B", 
-    "MG":   "Mic gain", 
-    "ML":   "Monitor level", 
-    "MN":   "Menu entry number", 
-    "MP":   "Menu param read/set", 
-    "MQ":   "Menu param read/set", // KX3 only
-    "NB":   "Noise Blanketer VFO-A", 
-    "NB$":  "Noise Blanketer VFO-B", 
-    "NL":   "Noise blanketer level VFO-A", 
-    "NL$":  "Noise blanketer level VFO-B", 
-    "OM":   "Option Modules", 
-    "PA":   "RX preamp on/off VFO-A", 
-    "PA$":  "RX preamp on/off VFO-B", 
-    "PC":   "Power Control", 
-    "PN":   "Internal Use Only", 
-    "PO":   "Power Output Read", 
-    "PS":   "Power on/off", 
-    "RA":   "RX attenuator on/off VFO-A", 
-    "RA$":  "RX attenuator on/off VFO-B", 
-    "RC":   "RIT/XIT offset clear", 
-    "RD":   "RIT down", 
-    "RG":   "RF gain VFO-A", 
-    "RG$":  "RF gain VFO-B", 
-    "RO":   "RIT/XIT offset (abs)", 
-    "RT":   "RIT on/off", 
-    "RU":   "RIT up", 
-    "RV":   "Firmware revisions", 
-    "RX":   "Enter RX mode", 
-    "SB":   "Sub or dual watch", 
-    "SD":   "QSK delay", 
-    "SM":   "S-meter VFO-A", 
-    "SM$":  "S-meter VFO-B", 
-    "SMH":  "High-res S-Meter",  // Not for KX3
-    "SP":   "Internal Use Only", 
-    "SQ":   "Squelch Level VFO-A", 
-    "SQ$":  "Squelch Level VFO-B", 
-    "SWH":  "Hold functions",  // TODO model function object of Table 8
-    "SWT":  "Tap functions", 
-    "TB":   "Buffered text", 
-    "TE":   "Transmit EQ", 
-    "TQ":   "Transmit query",
-    "TT":   "Text-to-Terminal", 
-    "TX":   "Enter TX mode", 
-    "UP":   "Frequency up VFO-A", 
-    "UPB":  "Frequency up VFO-B", 
-    "VX":   "VOX state", 
-    "XF":   "XFIL number VFO-A", 
-    "XF$":  "XFIL number VFO-B", 
-    "XT":   "XIT on/off" 
+    "?":    {name:"busy",
+             description: "busy"},
+    "AG":   {name:"AFGainVFOA",
+             parser: function(e){e.AFGainVFOA=parseInt(e.data)},
+             description: "AF gain VFO-A"},
+    "AG$":  {name:"AFGainVFOB",
+             parser: function(e){e.AFGainVFOB=parseInt(e.data)},
+             description: "AF gain VFO-B"},
+    "AI":   {name:"AutoInfoMode",
+             description: "Auto-Info mode",
+             parser: function(e){
+               e.autoInfoMode = parseInt(e.data);
+            }},
+    "AK":   {description:"Internal Use Only"},
+    "AN":   {name:"antennaSelection",
+             description:"Antenna Selection",
+             parser: function(e){
+               e.antenna = parseInt(e.data);
+            }},
+    "BC":   {description:"Interal Use Only"},
+    "BG":   {name:"bargraph",
+             description:"Bargraph read",
+             parser: function(e){
+               e.bargraph = parseInt(e.data.substr(0,2));
+               e.transmit = (e.data.substr(2,1)=='T')?true:false;
+               e.receive  = (e.data.substr(2,1)=='R')?true:false;
+            }},
+    "BN":   {name:"bandChangeVFOA",
+             description:"Band Number VFO-A",
+             parser: function(e){
+               switch(parseInt(e.data)){
+                 case 0:
+                   e.band = 160;
+                   break;
+                 case 2:
+                   e.band = 80;
+                   break;
+                 case 3:
+                   e.band = 40;
+                   break;
+                 case 4:
+                   e.band = 30;
+                   break;
+                 case 5:
+                   e.band = 20;
+                   break;
+                 case 6:
+                   e.band = 17;
+                   break;
+                 case 7:
+                   e.band = 15;
+                   break;
+                 case 8:
+                   e.band = 12;
+                   break;
+                 case 9:
+                   e.band = 10;
+                   break;
+                 case 10:
+                   e.band = 6;
+                   break;
+                 default:
+                   if( e.band >= 11 && e.band <= 15 ){
+                     // reserved for expansion
+                     e.band = null;
+                   }
+                   if( e.band >= 16 && e.band <= 24 ){
+                     e.band = "Xvtr band #"+e.band-15; // ?? Not sure
+                   }
+               } // end switch
+            }},
+    "BN$":  {name:"bandChangeVFOB",
+             description:"Band Number VFO-B",
+             // TODO This is a copy/paste. How do I not duplicate these cleanly?
+             parser: function(e){
+               switch(parseInt(e.data)){
+                 case 0:
+                   e.band = 160;
+                   break;
+                 case 2:
+                   e.band = 80;
+                   break;
+                 case 3:
+                   e.band = 40;
+                   break;
+                 case 4:
+                   e.band = 30;
+                   break;
+                 case 5:
+                   e.band = 20;
+                   break;
+                 case 6:
+                   e.band = 17;
+                   break;
+                 case 7:
+                   e.band = 15;
+                   break;
+                 case 8:
+                   e.band = 12;
+                   break;
+                 case 9:
+                   e.band = 10;
+                   break;
+                 case 10:
+                   e.band = 6;
+                   break;
+                 default:
+                   if( e.band >= 11 && e.band <= 15 ){
+                     // reserved for expansion
+                     e.band = null;
+                   }
+                   if( e.band >= 16 && e.band <= 24 ){
+                     e.band = "Xvtr band #"+e.band-15; // ?? Not sure
+                   }
+               } // end switch
+            }},
+    "BR":   {name:"baudRate",
+             description:"Baud rate set",
+             parser: function(e){
+               switch(parseInt(e.data)){
+                 case 0:
+                   e.baudRate = 4800;
+                   break;
+                 case 2:
+                   e.baudRate = 9600;
+                   break;
+                 case 3:
+                   e.baudRate = 38400;
+                   break;
+               }
+            }},
+    "BW":   {name:"filterBandwidthVFOA",
+             description:"Filter Bandwidth VFO-A",
+             parser: function(e){
+               e.filterBandwidth = parseInt(e.data);
+            }},
+    "BW$":  {name:"filterBandwidthVFOB",
+             description:"Filter Bandwidth VFO-B",
+             parser: function(e){
+               e.filterBandwidth = parseInt(e.data);
+            }},
+    "CP":   {name:"speechCompression",
+             description:"Speech compression",
+             parser: function(e){
+               e.speechCompression = parseInt(e.data);
+            }},
+    "CW":   {name:"sidetonePitch",
+             description:"CW sidetone pitch",
+             parser: function(e){
+               e.sidetonePitch = parseInt(e.data);
+            }},
+    "DB":   {name:"displayVFOB",
+             description:"VFO-B display text",
+             parser: function(e){
+               e.display = e.data;
+            }},
+    "DL":   {name:"dspCommandTrace",
+             description:"DSP command trace",
+             parser: function(e){
+               if( e.data == '2')
+                 e.dspDebug = false
+               if( e.data == '3')
+                 e.dspDebug = true;
+            }},
+    "DM":   {description:"Internal Use Only"},
+    "DN":   {name:"downVFOA",
+             description:"Frequency Down VFO-A",
+             parser: function(e){
+               // e.delta is in Hz
+               switch(parseInt(e.data)){
+                 case 0:
+                   e.delta = 1;
+                   break;
+                 case 1:
+                   e.delta = 10;
+                   break;
+                 case 2:
+                   e.delta = 20;
+                   break;
+                 case 3:
+                   e.delta = 50;
+                   break;
+                 case 4:
+                   e.delta = 1000;
+                   break;
+                 case 5:
+                   e.delta = 2000;
+                   break;
+                 case 6:
+                   e.delta = 3000;
+                   break;
+                 case 7:
+                   e.delta = 5000;
+                   break;
+                 case 8:
+                   e.delta = 100;
+                   break;
+                 case 9:
+                   e.delta = 200;
+                   break;
+               }
+            }},
+    "DNB":  {name:"downVFOB", // TODO remove copy/paste dupliate
+             description:"Frequency Down VFO-B",
+             parser: function(e){
+               // e.delta is in Hz
+               switch(parseInt(e.data)){
+                 case 0:
+                   e.delta = 1;
+                   break;
+                 case 1:
+                   e.delta = 10;
+                   break;
+                 case 2:
+                   e.delta = 20;
+                   break;
+                 case 3:
+                   e.delta = 50;
+                   break;
+                 case 4:
+                   e.delta = 1000;
+                   break;
+                 case 5:
+                   e.delta = 2000;
+                   break;
+                 case 6:
+                   e.delta = 3000;
+                   break;
+                 case 7:
+                   e.delta = 5000;
+                   break;
+                 case 8:
+                   e.delta = 100;
+                   break;
+                 case 9:
+                   e.delta = 200;
+                   break;
+               }
+            }},
+    "DS":   {description:"VGO-A text/icons"}, // TODO build/return state object
+    "DT":   {description:"Data sub-mode"},
+    "DV":   {description:"Diversity mode"}, 
+    "EL":   {description:"Error logging on/off"}, 
+    "ES":   {description:"ESSB mode"}, 
+    "EW":   {description:"Internal Use Only"}, 
+    "FA":   {description:"VFO-A Frequency"}, 
+    "FB":   {description:"VFO-B Frequency"}, 
+    "FI":   {description:"I.F. center frequency"}, 
+    "FN":   {description:"Interal Use Only"}, 
+    "FR":   {description:"Receive VFO select"}, 
+    "FT":   {description:"Transmit VFO select"}, 
+    "FW":   {description:"Filter bandwidth and # VFO-A"}, // deprecated. Use BW.
+    "FW$":  {description:"Filter bandwidth and # VFO-B"}, // deprecated. Use BW.
+    "GT":   {description:"AGC speed on/off"}, 
+    "IC":   {description:"Icon and misc. status"}, 
+    "ID":   {description:"Radio identification"}, 
+    "IF":   {name:"GeneralInformation",
+             description: "General information", 
+             parser: function(e){
+               e.frequencyVFOA=14.268000;
+               e.frequencyVFOB=14.268500;
+            }},
+    "IO":   {description:"Internal Use Only"}, 
+    "IS":   {description:"IF shift"}, 
+    "K2":   {description:"K2 command mode"}, 
+    "K3":   {description:"K3 command mode"}, 
+    "KS":   {description:"Keyer speed"}, 
+    "KT":   {description:"Internal Use Only"}, 
+    "KY":   {description:"Keyboard CW/DATA"}, 
+    "LD":   {description:"Internal Use Only"}, 
+    "LK":   {description:"VFO-A Lock"}, 
+    "LK$":  {description:"VFO-B Lock"}, 
+    "LN":   {description:"Link VFOs"}, 
+    "MC":   {description:"Memory channel"}, 
+    "MD":   {description:"Operating Mode VFO-A"}, 
+    "MD$":  {description:"Operating Mode VFO-B"}, 
+    "MG":   {description:"Mic gain"}, 
+    "ML":   {description:"Monitor level"}, 
+    "MN":   {description:"Menu entry number"}, 
+    "MP":   {description:"Menu param read/set"}, 
+    "MQ":   {description:"Menu param read/set"}, // KX3 only
+    "NB":   {description:"Noise Blanketer VFO-A"}, 
+    "NB$":  {description:"Noise Blanketer VFO-B"}, 
+    "NL":   {description:"Noise blanketer level VFO-A"}, 
+    "NL$":  {description:"Noise blanketer level VFO-B"}, 
+    "OM":   {description:"Option Modules"}, 
+    "PA":   {description:"RX preamp on/off VFO-A"}, 
+    "PA$":  {description:"RX preamp on/off VFO-B"}, 
+    "PC":   {description:"Power Control"}, 
+    "PN":   {description:"Internal Use Only"}, 
+    "PO":   {description:"Power Output Read"}, 
+    "PS":   {description:"Power on/off"}, 
+    "RA":   {description:"RX attenuator on/off VFO-A"}, 
+    "RA$":  {description:"RX attenuator on/off VFO-B"}, 
+    "RC":   {description:"RIT/XIT offset clear"}, 
+    "RD":   {description:"RIT down"}, 
+    "RG":   {description:"RF gain VFO-A"}, 
+    "RG$":  {description:"RF gain VFO-B"}, 
+    "RO":   {description:"RIT/XIT offset (abs)"}, 
+    "RT":   {description:"RIT on/off"}, 
+    "RU":   {description:"RIT up"}, 
+    "RV":   {description:"Firmware revisions"}, 
+    "RX":   {description:"Enter RX mode"}, 
+    "SB":   {description:"Sub or dual watch"}, 
+    "SD":   {description:"QSK delay"}, 
+    "SM":   {description:"S-meter VFO-A"}, 
+    "SM$":  {description:"S-meter VFO-B"}, 
+    "SMH":  {description:"High-res S-Meter"},  // Not for KX3
+    "SP":   {description:"Internal Use Only"}, 
+    "SQ":   {description:"Squelch Level VFO-A"}, 
+    "SQ$":  {description:"Squelch Level VFO-B"}, 
+    "SWH":  {description:"Hold functions"},  // TODO model function object of Table 8
+    "SWT":  {description:"Tap functions"}, 
+    "TB":   {description:"Buffered text"}, 
+    "TE":   {description:"Transmit EQ"}, 
+    "TQ":   {description:"Transmit query"},
+    "TT":   {description:"Text-to-Terminal"}, 
+    "TX":   {description:"Enter TX mode"}, 
+    "UP":   {description:"Frequency up VFO-A"}, 
+    "UPB":  {description:"Frequency up VFO-B"}, 
+    "VX":   {description:"VOX state"}, 
+    "XF":   {description:"XFIL number VFO-A"}, 
+    "XF$":  {description:"XFIL number VFO-B"}, 
+    "XT":   {description:"XIT on/off"}
   }
 
   //log.debug(exports);
@@ -263,7 +468,6 @@ var foo = new Elecraft();
 foo.list();
 foo.connect();
 foo.on('GeneralInformation', function(e){
-  log.debug( "got event '"+e.description+"'" );
   log.debug( e );
 });
 
