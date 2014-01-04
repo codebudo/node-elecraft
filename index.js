@@ -22,7 +22,7 @@ function Elecraft(){
     SerialPort.list(function(err,ports){
       ports.forEach(function(port){
         //log.debug(port);
-        log.debug(port.comName + ", " +port.pnpId+", "+port.manufacturer);
+        log.info(port.comName + ", " +port.pnpId+", "+port.manufacturer);
       });
     });
   }
@@ -39,7 +39,10 @@ function Elecraft(){
     });
   }
 
-  this.connect = function(){
+  this.connect = function(port){
+    if( !!port )
+      serialPortName = port;
+
     log.debug("Connecting...");
     var SP = SerialPort.SerialPort;
 
@@ -155,93 +158,12 @@ function Elecraft(){
             }},
     "BN":   {name:"bandChangeVFOA",
              description:"Band Number VFO-A",
-             parser: function(e){
-               switch(parseInt(e.data)){
-                 case 0:
-                   e.band = 160;
-                   break;
-                 case 2:
-                   e.band = 80;
-                   break;
-                 case 3:
-                   e.band = 40;
-                   break;
-                 case 4:
-                   e.band = 30;
-                   break;
-                 case 5:
-                   e.band = 20;
-                   break;
-                 case 6:
-                   e.band = 17;
-                   break;
-                 case 7:
-                   e.band = 15;
-                   break;
-                 case 8:
-                   e.band = 12;
-                   break;
-                 case 9:
-                   e.band = 10;
-                   break;
-                 case 10:
-                   e.band = 6;
-                   break;
-                 default:
-                   if( e.band >= 11 && e.band <= 15 ){
-                     // reserved for expansion
-                     e.band = null;
-                   }
-                   if( e.band >= 16 && e.band <= 24 ){
-                     e.band = "Xvtr band #"+e.band-15; // ?? Not sure
-                   }
-               } // end switch
-            }},
+             parser: bandChangeUpDown
+            },
     "BN$":  {name:"bandChangeVFOB",
              description:"Band Number VFO-B",
-             // TODO This is a copy/paste. How do I not duplicate these cleanly?
-             parser: function(e){
-               switch(parseInt(e.data)){
-                 case 0:
-                   e.band = 160;
-                   break;
-                 case 2:
-                   e.band = 80;
-                   break;
-                 case 3:
-                   e.band = 40;
-                   break;
-                 case 4:
-                   e.band = 30;
-                   break;
-                 case 5:
-                   e.band = 20;
-                   break;
-                 case 6:
-                   e.band = 17;
-                   break;
-                 case 7:
-                   e.band = 15;
-                   break;
-                 case 8:
-                   e.band = 12;
-                   break;
-                 case 9:
-                   e.band = 10;
-                   break;
-                 case 10:
-                   e.band = 6;
-                   break;
-                 default:
-                   if( e.band >= 11 && e.band <= 15 ){
-                     // reserved for expansion
-                     e.band = null;
-                   }
-                   if( e.band >= 16 && e.band <= 24 ){
-                     e.band = "Xvtr band #"+e.band-15; // ?? Not sure
-                   }
-               } // end switch
-            }},
+             parser: bandChangeUpDown
+            },
     "BR":   {name:"baudRate",
              description:"Baud rate set",
              parser: function(e){
@@ -293,78 +215,12 @@ function Elecraft(){
     "DM":   {description:"Internal Use Only"},
     "DN":   {name:"downVFOA",
              description:"Frequency Down VFO-A",
-             parser: function(e){
-               // e.delta is in Hz
-               switch(parseInt(e.data)){
-                 case 0:
-                   e.delta = 1;
-                   break;
-                 case 1:
-                   e.delta = 10;
-                   break;
-                 case 2:
-                   e.delta = 20;
-                   break;
-                 case 3:
-                   e.delta = 50;
-                   break;
-                 case 4:
-                   e.delta = 1000;
-                   break;
-                 case 5:
-                   e.delta = 2000;
-                   break;
-                 case 6:
-                   e.delta = 3000;
-                   break;
-                 case 7:
-                   e.delta = 5000;
-                   break;
-                 case 8:
-                   e.delta = 100;
-                   break;
-                 case 9:
-                   e.delta = 200;
-                   break;
-               }
-            }},
-    "DNB":  {name:"downVFOB", // TODO remove copy/paste dupliate
+             parser: vfoUpDown
+            },
+    "DNB":  {name:"downVFOB", 
              description:"Frequency Down VFO-B",
-             parser: function(e){
-               // e.delta is in Hz
-               switch(parseInt(e.data)){
-                 case 0:
-                   e.delta = 1;
-                   break;
-                 case 1:
-                   e.delta = 10;
-                   break;
-                 case 2:
-                   e.delta = 20;
-                   break;
-                 case 3:
-                   e.delta = 50;
-                   break;
-                 case 4:
-                   e.delta = 1000;
-                   break;
-                 case 5:
-                   e.delta = 2000;
-                   break;
-                 case 6:
-                   e.delta = 3000;
-                   break;
-                 case 7:
-                   e.delta = 5000;
-                   break;
-                 case 8:
-                   e.delta = 100;
-                   break;
-                 case 9:
-                   e.delta = 200;
-                   break;
-               }
-            }},
+             parser: vfoUpDown
+            },
     "DS":   {name:"displayVFOA",
              description:"VFO-A text/icons", 
              parser: function(e){
@@ -439,12 +295,34 @@ function Elecraft(){
              parser: function(e){
                e.frequencyVFOB = parseInt(e.data);
             }},
-    "FI":   {description:"I.F. center frequency"}, 
+    "FI":   {name:"IFCenterFrequency",
+             description:"I.F. center frequency", 
+             parser: function(e){
+               e.centerFrequency = parseInt(e.data);
+            }},
     "FN":   {description:"Interal Use Only"}, 
-    "FR":   {description:"Receive VFO select"}, 
-    "FT":   {description:"Transmit VFO select"}, 
-    "FW":   {description:"Filter bandwidth and # VFO-A (Deprecated. Use BW)"},
-    "FW$":  {description:"Filter bandwidth and # VFO-B (Deprecated. Use BW)"},
+    "FR":   {name:"receiveVFO",
+             description:"Receive VFO select"}, 
+             parser: function(e){
+               e.receiveVFO = e.data;
+            }},
+    "FT":   {name:"transmitVFO",
+             description:"Transmit VFO select"}, 
+             parser: function(e){
+               e.transmitVFO = e.data;
+            }},
+    "FW":   {name:"filterBandwidthVFOA",
+             description:"Filter bandwidth and # VFO-A (Deprecated. Use BW)",
+             parser: function(e){
+               log.warn("FW is deprecated. Use BW.");
+               e.filterBandwidth = parseInt(e.data);
+            }},
+    "FW$":  {name:"filterBandwidthVFOB",
+             description:"Filter bandwidth and # VFO-B (Deprecated. Use BW)",
+             parser: function(e){
+               log.warn("FW$ is deprecated. Use BW.");
+               e.filterBandwidth = parseInt(e.data);
+            }},
     "GT":   {description:"AGC speed on/off"}, 
     "IC":   {description:"Icon and misc. status"}, 
     "ID":   {description:"Radio identification"}, 
@@ -516,6 +394,85 @@ function Elecraft(){
     "XF":   {description:"XFIL number VFO-A"}, 
     "XF$":  {description:"XFIL number VFO-B"}, 
     "XT":   {description:"XIT on/off"}
+  }
+
+  function bandChangeUpDown(e){
+    switch(parseInt(e.data)){
+      case 0:
+        e.band = 160;
+        break;
+      case 2:
+        e.band = 80;
+        break;
+      case 3:
+        e.band = 40;
+        break;
+      case 4:
+        e.band = 30;
+        break;
+      case 5:
+        e.band = 20;
+        break;
+      case 6:
+        e.band = 17;
+        break;
+      case 7:
+        e.band = 15;
+        break;
+      case 8:
+        e.band = 12;
+        break;
+      case 9:
+        e.band = 10;
+        break;
+      case 10:
+        e.band = 6;
+        break;
+      default:
+        if( e.band >= 11 && e.band <= 15 ){
+          // reserved for expansion
+          e.band = null;
+        }
+        if( e.band >= 16 && e.band <= 24 ){
+          e.band = "Xvtr band #"+e.band-15; // ?? Not sure
+        }
+    } // end switch
+  }
+
+  function vfoUpDown(e){
+    // e.delta is in Hz
+    switch(parseInt(e.data)){
+      case 0:
+        e.delta = 1;
+        break;
+      case 1:
+        e.delta = 10;
+        break;
+      case 2:
+        e.delta = 20;
+        break;
+      case 3:
+        e.delta = 50;
+        break;
+      case 4:
+        e.delta = 1000;
+        break;
+      case 5:
+        e.delta = 2000;
+        break;
+      case 6:
+        e.delta = 3000;
+        break;
+      case 7:
+        e.delta = 5000;
+        break;
+      case 8:
+        e.delta = 100;
+        break;
+      case 9:
+        e.delta = 200;
+        break;
+    }
   }
 
   //log.debug(exports);
