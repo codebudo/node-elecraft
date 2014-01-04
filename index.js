@@ -80,6 +80,7 @@ function Elecraft(){
           log.info("resutls "+results);
         }
       });
+      kx3.write('DS;')
     });
 
     kx3.open();
@@ -364,20 +365,86 @@ function Elecraft(){
                    break;
                }
             }},
-    "DS":   {description:"VGO-A text/icons"}, // TODO build/return state object
-    "DT":   {description:"Data sub-mode"},
-    "DV":   {description:"Diversity mode"}, 
-    "EL":   {description:"Error logging on/off"}, 
-    "ES":   {description:"ESSB mode"}, 
+    "DS":   {name:"displayVFOA",
+             description:"VFO-A text/icons", 
+             parser: function(e){
+               // TODO this doesn't work. Characters after a '.' are always '='
+               // This could be a problem with the API and docs or a bug in
+               // node-serialport. Much researchings...
+               var zeros = '0000000000000000';
+               e.display = e.data.substr(0,8);
+               var output = [];
+
+               var allBinary='';
+               for( var i in e.data ){
+                 var binaryValue = e.data.charCodeAt(i).toString(2);
+
+                 // pad zeros in front so we always have a 16bit string
+                 binaryValue = zeros.substr(binaryValue.length)+binaryValue;
+                 allBinary += binaryValue +' ';
+                 if( binaryValue[7] == '1' ){
+                   output.push( '.' );
+                 }
+                 var charCode = parseInt(binaryValue.substr(-6),2);
+                 var thisChar = String.fromCharCode(charCode);
+                 output.push( thisChar );
+
+                 //log.debug( thisChar+' '+binaryValue+' '+charCode );
+               }
+               //log.debug( output.join('') );
+               //log.debug( allBinary );
+                              
+            }},
+    "DT":   {name:"dataMode",
+             description:"Data sub-mode",
+             parser: function(e){
+               switch(parseInt(e.data)){
+                 case 0:
+                   e.dataMode = 'DATA A';
+                   break;
+                 case 1:
+                   e.dataMode = 'AFSK A';
+                   break;
+                 case 2:
+                   e.dataMode = 'FSK D';
+                   break;
+                 case 3:
+                   e.dataMode = 'PSK D';
+                   break;
+               }
+            }},
+    "DV":   {name:"diversityModeOn",
+             description:"Diversity mode", 
+             parser: function(e){
+               e.diversityModeOn = (e.data=='1')?true:false;
+            }},
+    "EL":   {name:"errorLoggingOn",
+             description:"Error logging on/off", 
+             parser: function(e){
+               e.errorLoggingOn = (e.data=='1')?true:false;
+            }},
+    "ES":   {name:"essbModeOn",
+             description:"ESSB mode", 
+             parser: function(e){
+               e.essbModeOn = (e.data=='1')?true:false;
+            }},
     "EW":   {description:"Internal Use Only"}, 
-    "FA":   {description:"VFO-A Frequency"}, 
-    "FB":   {description:"VFO-B Frequency"}, 
+    "FA":   {name:"frequencyVFOA",
+             description:"VFO-A Frequency", 
+             parser: function(e){
+               e.frequencyVFOA = parseInt(e.data);
+            }},
+    "FB":   {name:"frequencyVFOB",
+             description:"VFO-B Frequency", 
+             parser: function(e){
+               e.frequencyVFOB = parseInt(e.data);
+            }},
     "FI":   {description:"I.F. center frequency"}, 
     "FN":   {description:"Interal Use Only"}, 
     "FR":   {description:"Receive VFO select"}, 
     "FT":   {description:"Transmit VFO select"}, 
-    "FW":   {description:"Filter bandwidth and # VFO-A"}, // deprecated. Use BW.
-    "FW$":  {description:"Filter bandwidth and # VFO-B"}, // deprecated. Use BW.
+    "FW":   {description:"Filter bandwidth and # VFO-A (Deprecated. Use BW)"},
+    "FW$":  {description:"Filter bandwidth and # VFO-B (Deprecated. Use BW)"},
     "GT":   {description:"AGC speed on/off"}, 
     "IC":   {description:"Icon and misc. status"}, 
     "ID":   {description:"Radio identification"}, 
