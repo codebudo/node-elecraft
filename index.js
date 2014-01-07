@@ -245,7 +245,7 @@ function Elecraft(){
                  var thisChar = String.fromCharCode(charCode);
                  output.push( thisChar );
 
-                 //log.debug( thisChar+' '+binaryValue+' '+charCode );
+                 log.debug( thisChar+' '+binaryValue+' '+charCode );
                }
                //log.debug( output.join('') );
                //log.debug( allBinary );
@@ -302,12 +302,12 @@ function Elecraft(){
             }},
     "FN":   {description:"Interal Use Only"}, 
     "FR":   {name:"receiveVFO",
-             description:"Receive VFO select"}, 
+             description:"Receive VFO select", 
              parser: function(e){
                e.receiveVFO = e.data;
             }},
     "FT":   {name:"transmitVFO",
-             description:"Transmit VFO select"}, 
+             description:"Transmit VFO select", 
              parser: function(e){
                e.transmitVFO = e.data;
             }},
@@ -323,14 +323,21 @@ function Elecraft(){
                log.warn("FW$ is deprecated. Use BW.");
                e.filterBandwidth = parseInt(e.data);
             }},
-    "GT":   {description:"AGC speed on/off"}, 
-    "IC":   {description:"Icon and misc. status"}, 
+    "GT":   {name:"agcSpeed",
+             description:"AGC speed on/off", 
+             parser: function(e){
+               e.agcSpeed = parseInt(e.data.substr(0,3));
+               e.acgOn = (e.data.substr(3,1) == '1')?true:false;
+            }},
+    "IC":   {name:"iconStatus",
+             description:"Icon and misc. status", 
+             parser: function(e){
+            }},
     "ID":   {description:"Radio identification"}, 
     "IF":   {name:"GeneralInformation",
              description: "General information", 
              parser: function(e){
                e.frequencyVFOA=14.268000;
-               e.frequencyVFOB=14.268500;
             }},
     "IO":   {description:"Internal Use Only"}, 
     "IS":   {description:"IF shift"}, 
