@@ -547,7 +547,111 @@ function Elecraft(){
                  default: e.menuItem = "Exit Menu";
                };
             }},
-    "MP":   {description:"Menu param read/set"}, 
+    "MP":   {name:"menuParameter",
+             description:"Menu param read/set", 
+               var menuItem = parseInt(e.data.substr(2));
+               switch(menuItem){
+                 case 0: e.menuItem = "ALARM"; break;
+                 case 1: e.menuItem = "CW IAMBIC"; break;
+
+                 case 5: e.menuItem = "MSG RPT"; break;
+
+                 case 7: e.menuItem = "RPT OFS"; break;
+                 case 8: e.menuItem = "RX EQ"; break;
+                 case 9: e.menuItem = "TX EQ"; break;
+                 case 10: e.menuItem = "VOX GN"; break;
+                 
+                 case 12: e.menuItem = "CW WGHT"; break;
+                 case 13: e.menuItem = "2 TONE"; break;
+
+                 case 18: e.menuItem = "FM MODE"; break;
+
+                 case 21: e.menuItem = "FM DEV"; break;
+                 
+                 case 23: e.menuItem = "ATU MD"; break;
+                 case 24: e.menuItem = "BAT MIN"; break;
+                 
+                 case 26: e.menuItem = "SER NUM"; break;
+                 
+                 case 28: e.menuItem = "FW REVS"; break;
+
+                 case 45: e.menuItem = "AUTOINF"; break;
+                 
+                 case 47: e.menuItem = "AF LIM"; break;
+
+                 case 52: e.menuItem = "LCD TST"; break;
+
+                 case 57: e.menuItem = "RS232"; break;
+                 case 58: e.menuItem = "TUN PWR"; break;
+
+                 case 60: e.menuItem = "SMTR MD"; break;
+
+                 case 62: e.menuItem = "REF CAL"; break;
+
+                 case 70: e.menuItem = "SW TEST"; break;
+                 case 71: e.menuItem = "SW TONE"; break;
+                 case 72: e.menuItem = "TECH MD"; break;
+                 case 73: e.menuItem = "TIME"; break;
+                 case 74: e.menuItem = "AGC THR"; break;
+
+                 case 76: e.menuItem = "BND MAP"; break;
+
+                 case 82: e.menuItem = "MIC BTN"; break;
+
+                 case 84: e.menuItem = "VFO CTS"; break;
+
+                 case 87: e.menuItem = "VFO OFS"; break;
+                 case 88: e.menuItem = "WATTMTR"; break;
+                 case 89: e.menuItem = "XVx ON"; break;
+                 case 90: e.menuItem = "XVx RF"; break;
+                 case 91: e.menuItem = "XVx IF"; break;
+                 case 92: e.menuItem = "XVx PWR"; break;
+                 case 93: e.menuItem = "XVx OFS"; break;
+                 case 94: e.menuItem = "XVx ADR"; break;
+                 
+                 case 96: e.menuItem = "TX ESSB"; break;
+
+                 case 101: e.menuItem = "TX GATE"; break;
+
+                 case 104: e.menuItem = "VFO CRS"; break;
+                 case 105: e.menuItem = "AFX MD"; break;
+
+                 case 110: e.menuItem = "MACRO x"; break;
+
+                 case 120: e.menuItem = "CW KEY1"; break;
+                 case 121: e.menuItem = "CW KEY2"; break;
+                 case 122: e.menuItem = "VOX INH"; break;
+                 case 123: e.menuItem = "RX I/Q"; break;
+                 case 124: e.menuItem = "RX ISO"; break;
+                 case 125: e.menuItem = "RXSBNUL"; break;
+                 case 126: e.menuItem = "AM MODE"; break;
+                 case 127: e.menuItem = "TXSBNUL"; break;
+                 case 128: e.menuItem = "AGC MD"; break;
+                 case 129: e.menuItem = "AGC SPD"; break;
+
+                 case 130: e.menuItem = "TX BIAS"; break;
+                 case 131: e.menuItem = "TX GAIN"; break;
+                 case 132: e.menuItem = "TXCRNUL"; break;
+                 case 133: e.menuItem = "AUTOOFF"; break;
+                 case 134: e.menuItem = "RX XFIL"; break;
+                 case 135: e.menuItem = "MICBIAS"; break;
+                 case 136: e.menuItem = "PREAMP"; break;
+                 case 137: e.menuItem = "BAT CHG"; break;
+                 case 138: e.menuItem = "BKLIGHT"; break;
+                 case 139: e.menuItem = "COR LVL"; break;
+
+                 case 140: e.menuItem = "DUAL RX"; break;
+                 case 141: e.menuItem = "ACC2 IO"; break;
+                 case 142: e.menuItem = "RX SHFT"; break;
+                 case 143: e.menuItem = "RX NR"; break;
+                 case 144: e.menuItem = "PBT SSB"; break;
+                 case 145: e.menuItem = "LED BRT"; break;
+                 case 146: e.menuItem = "PA MODE"; break;
+                 case 147: e.menuItem = "2M MODE"; break;
+                           
+                 default: e.menuItem = "Exit Menu";
+               };
+            }},
     "MQ":   {description:"Menu param read/set"}, // KX3 only
     "NB":   {description:"Noise Blanketer VFO-A"}, 
     "NB$":  {description:"Noise Blanketer VFO-B"}, 
