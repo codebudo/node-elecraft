@@ -10,20 +10,21 @@ log.set(log.DEBUG);
 // configs
 var serialPortName = "/dev/cu.usbserial-A501XQ4S";
 
-log.info("Starting...");
+log.trace("Starting...");
 
 function Elecraft(){
   var self = this;
   EventEmitter.call(this);
 
 
-  this.list = function(){
-    log.debug("Listing available ports");
+  this.list = function(cb){
+    log.trace("Listing available ports");
     SerialPort.list(function(err,ports){
+      ("function" == typeof cb)?cb(ports):"";
       ports.forEach(function(port){
-        //log.debug(port);
-        log.info(port.comName + ", " +port.pnpId+", "+port.manufacturer);
+        log.trace(port.comName + ", " +port.pnpId+", "+port.manufacturer);
       });
+      //console.log(typeof ports, Array.isArray(ports));
     });
   }
 
@@ -43,16 +44,16 @@ function Elecraft(){
     if( !!port )
       serialPortName = port;
 
-    log.debug("Connecting...");
+    log.trace("Connecting...");
     var SP = SerialPort.SerialPort;
 
     // TODO fix async validation. Bypass for now.
-    /*if( validatePort(serialPortName) ){
-      log.debug("Found port " + serialPortName);
+    if( validatePort(serialPortName) ){
+      log.trace("Found port " + serialPortName);
     } else {
-      log.debug("Port not found. Exiting.");
+      log.error("Port not found. Exiting.");
       process.exit(); 
-    }*/
+    }
     
     var kx3 = new SP(serialPortName, {
       baudrate: 4800,
@@ -90,8 +91,8 @@ function Elecraft(){
   }
 
 
-  function processCommand(raw){
-    log.debug('>'+raw);
+  this.processCommand = function(raw){
+    log.trace('>'+raw);
 
     var three = commands[raw.substr(0,3)];
     var two   = commands[raw.substr(0,2)];
@@ -245,10 +246,10 @@ function Elecraft(){
                  var thisChar = String.fromCharCode(charCode);
                  output.push( thisChar );
 
-                 log.debug( thisChar+' '+binaryValue+' '+charCode );
+                 log.trace( thisChar+' '+binaryValue+' '+charCode );
                }
-               //log.debug( output.join('') );
-               //log.debug( allBinary );
+               //log.trace( output.join('') );
+               //log.trace( allBinary );
                               
             }},
     "DT":   {name:"dataMode",
@@ -343,22 +344,22 @@ function Elecraft(){
     "IS":   {name:"IFShift",
              description:"IF shift", 
              parser: function(e){
-               e.IFShift = e.data..substr(2).trimLeft();
+               //e.IFShift = e.data..substr(2).trimLeft();
             }},
     "K2":   {name:"k2Mode",
              description:"K2 command mode", 
              parser: function(e){
-               e.k2mode = parseInt(e.data..substr(2));
+               //e.k2mode = parseInt(e.data..substr(2));
             }},
     "K3":   {name:"k3mode",
              description:"K3 command mode", 
              parser: function(e){
-               e.k2mode = parseInt(e.data..substr(2));
+               //e.k2mode = parseInt(e.data..substr(2));
             }},
     "KS":   {name:"keyerSpeed",
              description:"Keyer speed", 
              parser: function(e){
-               e.keyerSpeed = parseInt(e.data..substr(2));
+               //e.keyerSpeed = parseInt(e.data..substr(2));
             }},
     "KT":   {description:"Internal Use Only"}, 
     "KY":   {name:"CWData",
@@ -549,6 +550,7 @@ function Elecraft(){
             }},
     "MP":   {name:"menuParameter",
              description:"Menu param read/set", 
+             parser: function(e){
                var menuItem = parseInt(e.data.substr(2));
                switch(menuItem){
                  case 0: e.menuItem = "ALARM"; break;
@@ -798,24 +800,25 @@ function Elecraft(){
     }
   }
 
-  //log.debug(exports);
+  //log.trace(exports);
   //return exports;
 }
 
 util.inherits(Elecraft, EventEmitter);
-//log.debug(foo.prototype);
-//log.debug(foo.super_);
-//log.debug(foo instanceof EventEmitter);
+//log.trace(foo.prototype);
+//log.trace(foo.super_);
+//log.trace(foo instanceof EventEmitter);
 
 
 module.exports = new Elecraft();
 
 // TODO move tests to another file
+/*
 var foo = new Elecraft();
 foo.list();
 foo.connect();
 foo.on('GeneralInformation', function(e){
-  log.debug( e );
+  log.trace( e );
 });
-
+*/
 
