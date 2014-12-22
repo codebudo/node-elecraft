@@ -1,6 +1,11 @@
 
-var kx = require('../src/elecraft.js'),
-    assert = require('assert');
+var assert = require('assert'),
+    blanket = require('blanket')({
+      pattern: function (filename) {
+        return !/node_modules/.test(filename);
+      }
+    }),
+    kx = require('../src/elecraft.js');
 
 describe('Elecraft', function(){
   describe('#list()', function(){
@@ -18,7 +23,12 @@ describe('Elecraft', function(){
       kx.processCommand("IF");
     });
 
-    it('should emit a "busy" event');
+    it('should emit a "busy" event', function(done){
+      kx.on('busy', function(e){
+        done();
+      });
+      kx.processCommand("?");
+    });
   });
 });
 
