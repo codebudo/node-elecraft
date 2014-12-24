@@ -21,73 +21,70 @@ function Elecraft(){
     log.trace("Listing available ports");
     SerialPort.list(function(err,ports){
       ("function" == typeof cb)?cb(ports):"";
-      ports.forEach(function(port){
-        log.trace(port.comName + ", " +port.pnpId+", "+port.manufacturer);
-      });
-      //console.log(typeof ports, Array.isArray(ports));
     });
   }
 
-  function validatePort(portName){
-    SerialPort.list(function(err,ports){
+  function validatePort(portName, cb){
+    this.list(function(ports){
       for( port in ports ){
         if( port.comName == portName ){
           console.log( port.comName );
-          return true;
+          cb();
         }
       };
-      return false;
+      cb(portName + " is not a valid serial port");
     });
   }
 
-  this.connect = function(port){
+  this.connect = function(port, cb){
     if( !!port )
       serialPortName = port;
 
     log.trace("Connecting...");
     var SP = SerialPort.SerialPort;
 
-    // TODO fix async validation. Bypass for now.
-    if( validatePort(serialPortName) ){
+    validatePort(serialPortName, function(err){
+      if(err){
+        log.debug(err);
+        log.error("Port not found. Exiting.");
+        process.exit(); 
+      }
       log.trace("Found port " + serialPortName);
-    } else {
-      log.error("Port not found. Exiting.");
-      process.exit(); 
-    }
     
-    var kx3 = new SP(serialPortName, {
-      baudrate: 4800,
-    }, false);
+      var kx3 = new SP(serialPortName, {
+        baudrate: 4800,
+      }, false);
 
-    kx3.on('open', function(){
-      var buffer = '';
-      log.info('open');
-      kx3.on('data', function(data){
-        log.trace("data: "+data);
-        //console.log( "data: "+data );
-        if( data != undefined )
-          buffer += data;
-        var index = buffer.indexOf(';');
-        while( index > 0 ){
-          processCommand(buffer.substr(0,index));
-          buffer = buffer.substring(index+1);
-          index = buffer.indexOf(';');
-        }
+      kx3.on('open', function(){
+        var buffer = '';
+        log.info('open');
+        kx3.on('data', function(data){
+          log.trace("data: "+data);
+          //console.log( "data: "+data );
+          if( data != undefined )
+            buffer += data;
+          var index = buffer.indexOf(';');
+          while( index > 0 ){
+            processCommand(buffer.substr(0,index));
+            buffer = buffer.substring(index+1);
+            index = buffer.indexOf(';');
+          }
 
+        });
+
+        kx3.write('AI1;', function(err,results){
+          if( err ){
+            log.error("err "+err);
+          }
+          if( results ){
+            log.info("resutls "+results);
+          }
+        });
+        kx3.write('DS;')
       });
 
-      kx3.write('AI1;', function(err,results){
-        if( err ){
-          log.error("err "+err);
-        }
-        if( results ){
-          log.info("resutls "+results);
-        }
-      });
-      kx3.write('DS;')
+      kx3.open();
     });
-
-    kx3.open();
   }
 
 
@@ -129,6 +126,7 @@ function Elecraft(){
     }
   }
 
+  //this.commands = {
   var commands = {
     "?":    {name:"busy",
              description: "busy"},
@@ -365,7 +363,7 @@ function Elecraft(){
     "KY":   {name:"CWData",
              description:"Keyboard CW/DATA", 
              parser: function(e){
-               e.CWData = e.data.substr(2).leftTrim();
+               //e.CWData = e.data.substr(2).leftTrim();
             }},
     "LD":   {description:"Internal Use Only"}, 
     "LK":   {name:"lockVFOA",
