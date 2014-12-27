@@ -18,18 +18,18 @@ function Elecraft(){
 
 
   this.list = function(cb){
-    log.trace("Listing available ports");
+    log.trace("Get list of available ports");
     SerialPort.list(function(err,ports){
       ("function" == typeof cb)?cb(ports):"";
     });
   }
 
   function validatePort(portName, cb){
-    this.list(function(ports){
-      for( port in ports ){
-        if( port.comName == portName ){
-          console.log( port.comName );
+    self.list(function(ports){
+      for( var port in ports ){
+        if( ports[port].comName == portName ){
           cb();
+          return;
         }
       };
       cb(portName + " is not a valid serial port");
@@ -60,12 +60,11 @@ function Elecraft(){
         log.info('open');
         kx3.on('data', function(data){
           log.trace("data: "+data);
-          //console.log( "data: "+data );
           if( data != undefined )
             buffer += data;
           var index = buffer.indexOf(';');
           while( index > 0 ){
-            processCommand(buffer.substr(0,index));
+            self.processCommand(buffer.substr(0,index));
             buffer = buffer.substring(index+1);
             index = buffer.indexOf(';');
           }
@@ -336,7 +335,8 @@ function Elecraft(){
     "IF":   {name:"GeneralInformation",
              description: "General information", 
              parser: function(e){
-               e.frequencyVFOA=14.268000; // TODO this is obviously wrong
+               //e.frequencyVFOA=14.268000; // TODO this is obviously wrong
+               // e.frequencyVFOA = parseInt(e.data.substr(2));
             }},
     "IO":   {description:"Internal Use Only"}, 
     "IS":   {name:"IFShift",
@@ -375,7 +375,7 @@ function Elecraft(){
     "LK$":  {name:"lockVFOB",
              description:"VFO-B Lock", 
              parser: function(e){
-               var lock = e.data.substr(2);
+               var lock = e.data.substr(3);
                e.lockVFOB = lock=='1'?true:false;
             }},
     "LN":   {name:"linkVFOs",
@@ -397,7 +397,7 @@ function Elecraft(){
     "MD$":  {name:"operatingModeVFOB",
              description:"Operating Mode VFO-B", 
              parser: function(e){
-               e.operatingModeVFOB = operatingMode(parseInt(e.data.substr(2)));
+               e.operatingModeVFOB = operatingMode(parseInt(e.data.substr(3)));
             }},
     "MG":   {name:"micGain",
              description:"Mic gain", 
@@ -652,50 +652,258 @@ function Elecraft(){
                  default: e.menuItem = "Exit Menu";
                };
             }},
-    "MQ":   {description:"Menu param read/set"}, // KX3 only
-    "NB":   {description:"Noise Blanketer VFO-A"}, 
-    "NB$":  {description:"Noise Blanketer VFO-B"}, 
-    "NL":   {description:"Noise blanketer level VFO-A"}, 
-    "NL$":  {description:"Noise blanketer level VFO-B"}, 
-    "OM":   {description:"Option Modules"}, 
-    "PA":   {description:"RX preamp on/off VFO-A"}, 
-    "PA$":  {description:"RX preamp on/off VFO-B"}, 
-    "PC":   {description:"Power Control"}, 
-    "PN":   {description:"Internal Use Only"}, 
-    "PO":   {description:"Power Output Read"}, 
-    "PS":   {description:"Power on/off"}, 
-    "RA":   {description:"RX attenuator on/off VFO-A"}, 
-    "RA$":  {description:"RX attenuator on/off VFO-B"}, 
-    "RC":   {description:"RIT/XIT offset clear"}, 
-    "RD":   {description:"RIT down"}, 
-    "RG":   {description:"RF gain VFO-A"}, 
-    "RG$":  {description:"RF gain VFO-B"}, 
-    "RO":   {description:"RIT/XIT offset (abs)"}, 
-    "RT":   {description:"RIT on/off"}, 
-    "RU":   {description:"RIT up"}, 
-    "RV":   {description:"Firmware revisions"}, 
-    "RX":   {description:"Enter RX mode"}, 
-    "SB":   {description:"Sub or dual watch"}, 
-    "SD":   {description:"QSK delay"}, 
-    "SM":   {description:"S-meter VFO-A"}, 
-    "SM$":  {description:"S-meter VFO-B"}, 
-    "SMH":  {description:"High-res S-Meter"},  // Not for KX3
-    "SP":   {description:"Internal Use Only"}, 
-    "SQ":   {description:"Squelch Level VFO-A"}, 
-    "SQ$":  {description:"Squelch Level VFO-B"}, 
-    "SWH":  {description:"Hold functions"},  // TODO model function object of Table 8
-    "SWT":  {description:"Tap functions"}, 
-    "TB":   {description:"Buffered text"}, 
-    "TE":   {description:"Transmit EQ"}, 
-    "TQ":   {description:"Transmit query"},
-    "TT":   {description:"Text-to-Terminal"}, 
-    "TX":   {description:"Enter TX mode"}, 
-    "UP":   {description:"Frequency up VFO-A"}, 
-    "UPB":  {description:"Frequency up VFO-B"}, 
-    "VX":   {description:"VOX state"}, 
-    "XF":   {description:"XFIL number VFO-A"}, 
-    "XF$":  {description:"XFIL number VFO-B"}, 
-    "XT":   {description:"XIT on/off"}
+    "MQ":   {name:"menuParameter16", // KX3 only
+             description:"Menu param read/set (16-bit)",
+             parser: function(e){
+               e.txcrnul = e.data.substr(2);
+            }}, 
+    "NB":   {name:"noiseBlankerVFOA",
+             description:"Noise Blanketer VFO-A", 
+             parser: function(e){
+               var nb = e.data.substr(2);
+               e.noiseBlankerVFOA = nb=='1'?true:false;
+            }}, 
+    "NB$":  {name:"noiseBlankerVFOA",
+             description:"Noise Blanketer VFO-B",
+             parser: function(e){
+               var nb = e.data.substr(3);
+               e.noiseBlankerVFOB = nb=='1'?true:false;
+            }}, 
+    "NL":   {name:"noiseBlankerLevelVFOA",
+             description:"Noise blanketer level VFO-A",
+             parser: function(e){
+               var val = e.data.substr(2);
+               e.noiseBlankerLevelVFOA = parseInt(val);
+            }}, 
+    "NL$":  {name:"noiseBlankerLevelVFOB",
+             description:"Noise blanketer level VFO-B", 
+             parser: function(e){
+               var val = e.data.substr(3);
+               e.noiseBlankerLevelVFOB = parseInt(val);
+            }}, 
+    "OM":   {name:"optionModuleQuery",
+             description:"Option Modules", 
+             parser: function(e){
+               // TODO
+            }}, 
+    "PA":   {name:"receivePreampVFOA",
+             description:"RX preamp on/off VFO-A", 
+             parser: function(e){
+               var val = e.data.substr(2);
+               e.recievePreampVFOA = val=='1'?true:false;
+            }}, 
+    "PA$":  {name:"receivePreampVFOB",
+             description:"RX preamp on/off VFO-B", 
+             parser: function(e){
+               var val = e.data.substr(3);
+               e.recievePreampVFOB = val=='1'?true:false;
+            }}, 
+    "PC":   {name:"powerOutputLevel",
+             description:"Requested Power Output Level", 
+             parser: function(e){
+               var val = e.data.substr(2);
+               e.recievePreampVFOB = val=='1'?true:false;
+            }}, 
+    /*"PN":   {name:"",
+             description:"Internal Use Only"}, 
+             parser: function(e){
+               // TODO
+            }}, */
+    "PO":   {name:"powerOutputLevel",
+             description:"Power Output Read", 
+             parser: function(e){
+               var val = e.data.substr(2);
+               e.powerOutputLevel = parseInt(val);
+            }}, 
+    "PS":   {name:"powerStatus",
+             description:"Power on/off", 
+             parser: function(e){
+               var val = e.data.substr(2);
+               e.powerStatus = val=='1'?true:false;
+            }}, 
+    "RA":   {name:"receiveAttenuatorVFOA",
+             description:"RX attenuator on/off VFO-A", 
+             parser: function(e){
+               var val = e.data.substr(2);
+               e.recieveAttenuatorVFOB = val=='1'?true:false;
+            }}, 
+    "RA$":  {name:"receiveAttenuatorVFOA",
+             description:"RX attenuator on/off VFO-B", 
+             parser: function(e){
+               var val = e.data.substr(3);
+               e.recieveAttenuatorVFOB = val=='1'?true:false;
+            }}, 
+    "RC":   {name:"RITXITClear",
+             description:"RIT/XIT offset clear", 
+             parser: function(e){
+               // no data
+            }}, 
+    "RD":   {name:"RITDown",
+             description:"RIT down", 
+             parser: function(e){
+               // set only
+            }}, 
+    "RG":   {name:"RFGainVFOA",
+             description:"RF gain VFO-A", 
+             parser: function(e){
+               var val = e.data.substr(2);
+               e.RFGainVFOA = parseInt(val);
+            }}, 
+    "RG$":  {name:"RFGainVFOB",
+             description:"RF gain VFO-B", 
+             parser: function(e){
+               var val = e.data.substr(3);
+               e.RFGainVFOB = parseInt(val);
+            }}, 
+    "RO":   {name:"RITXITOffset",
+             description:"RIT/XIT offset (abs)", 
+             parser: function(e){
+               var val = e.data.substr(2);
+               e.RITXITOffset = parseInt(val);
+            }}, 
+    "RT":   {name:"RITEnabled",
+             description:"RIT on/off", 
+             parser: function(e){
+               var val = e.data.substr(2);
+               e.RITEnabled = val=='1'?true:false;
+            }}, 
+    "RU":   {name:"RITUp",
+             description:"RIT up", 
+             parser: function(e){
+               // set only
+            }}, 
+    "RV":   {name:"firmwareRevision",
+             description:"Firmware revisions", 
+             parser: function(e){
+               e.firmwareRevision = e.data.substr(2);
+            }}, 
+    "RX":   {name:"receiveMode",
+             description:"Enter recieve mode", 
+             parser: function(e){
+               // set only
+            }}, 
+    "SB":   {name:"dualWatchEnabled",
+             description:"Sub or dual watch", 
+             parser: function(e){
+               var val = e.data.substr(2);
+               e.dualWatch = val=='1'?true:false;
+            }}, 
+    "SD":   {name:"semiBreakInDelay",
+             description:"QSK delay", 
+             parser: function(e){
+               var val = e.data.substr(2);
+               e.semiBreakInDelay = parseInt(val);
+            }}, 
+    "SM":   {name:"sMeterVFOA",
+             description:"S-meter VFO-A", 
+             parser: function(e){
+               var val = e.data.substr(2);
+               e.sMeterVFOA = sMeterParseBasic(val);
+            }}, 
+    "SM$":  {name:"sMeterVFOB",
+             description:"S-meter VFO-B", 
+             parser: function(e){
+               var val = e.data.substr(3);
+               e.sMeterVFOB = sMeterParseBasic(val);
+            }}, 
+    "SMH":  {name:"highResSMeter",
+             description:"High-res S-Meter",  // K3 only
+             parser: function(e){
+               var val = e.data.substr(3);
+               e.highResSMeter = val;
+            }}, 
+    "SP":   {name:"specialFunctions",
+             description:"Internal Use Only", 
+             parser: function(e){
+               e.value = e.data.substr(2);
+            }}, 
+    "SPG":  {name:"ADCGroundReference", // KX3 only
+             description:"ADC ground-reference reading", 
+             parser: function(e){
+               // get only, response comes back as SPnnn;
+            }}, 
+    "SQ":   {name:"squelchLevelVFOA",
+             description:"Squelch Level VFO-A", 
+             parser: function(e){
+               e.value = parseInt(e.data.substr(2));
+            }}, 
+    "SQ$":  {name:"squelchLevelVFOB",
+             description:"Squelch Level VFO-B", 
+             parser: function(e){
+               e.value = parseInt(e.data.substr(3));
+            }}, 
+    "SWH":  {name:"switchEmulationHold",
+             description:"Hold functions",  
+             parser: function(e){
+               // TODO model function object of Table 8
+               //e.value = parseButtonHold(e);
+            }}, 
+    "SWT":  {name:"switchEmulationTap",
+             description:"Tap functions", 
+             parser: function(e){
+               // TODO model function object of Table 8
+               //e.value = parseButtonTap(e);
+            }}, 
+    "TB":   {name:"receivedText",
+             description:"Buffered text", 
+             parser: function(e){
+               e.bufferedCount = e.data[2];
+               e.remainingCount = e.data.substr(3,2);
+               e.text = e.data.substr(5);
+            }}, 
+    "TE":   {name:"transmitEQ",
+             description:"Transmit EQ", 
+             parser: function(e){
+               // set only
+            }}, 
+    "TQ":   {name:"transmitQuery",
+             description:"Transmit query",
+             parser: function(e){
+               var val = e.data.substr(2);
+               e.value = val=='1'?"transmit":"receive";
+            }}, 
+    "TT":   {name:"textToTerminal",
+             description:"Text-to-Terminal", 
+             parser: function(e){
+               // set only
+            }}, 
+    "TX":   {name:"transmitMode",
+             description:"Enter TX mode", 
+             parser: function(e){
+               // set only
+            }}, 
+    "UP":   {name:"frequencyUpVFOA",
+             description:"Frequency up VFO-A", 
+             parser: function(e){
+               // set only
+            }}, 
+    "UPB":  {name:"frequencyUpVFOB",
+             description:"Frequency up VFO-B", 
+             parser: function(e){
+               // set only
+            }}, 
+    "VX":   {name:"VOXEnabled",
+             description:"VOX state", 
+             parser: function(e){
+               var val = e.data.substr(2);
+               e.VOXEnabled = val=='0'?true:false;
+            }}, 
+    "XF":   {name:"XFILSelectionVFOA",
+             description:"XFIL number VFO-A", 
+             parser: function(e){
+               e.value = e.data.substr(2);
+            }}, 
+    "XF$":  {name:"XFILSelectionVFOB",
+             description:"XFIL number VFO-B", 
+             parser: function(e){
+               e.value = e.data.substr(3);
+            }}, 
+    "XT":   {name:"XITEnabled",
+             description:"XIT on/off",
+             parser: function(e){
+               var val = e.data.substr(2);
+               e.XITEnabled = val=='1'?true:false;
+            }} 
   }
 
   function operatingMode(e){
@@ -798,8 +1006,30 @@ function Elecraft(){
     }
   }
 
-  //log.trace(exports);
-  //return exports;
+  function sMeterParseBasic(e){
+    // basic format SM$nnnn
+    var val = parseInt(e.data.substr(2)); 
+    if( e.data[2] == '$' )
+      val = parseInt(e.data.substr(3));
+
+    switch( val ){
+      case 6:
+        e.sMeter = "S9";
+        break;
+      case 9:
+        e.sMeter = "S9+20";
+        break;
+      case 12:
+        e.sMeter = "S9+40";
+        break;
+      case 15:
+        e.sMeter = "S9+60";
+        break;
+      default:
+        e.sMeter = val;
+    }
+  }
+
 }
 
 util.inherits(Elecraft, EventEmitter);
