@@ -3,7 +3,7 @@
 
 var SerialPort   = require('serialport');
 var util         = require('util');
-var EventEmitter = require('events').EventEmitter;
+var EventEmitter = require('eventemitter2').EventEmitter2;
 var log       = require('./logger.js');
 log.set(log.DEBUG);
 
