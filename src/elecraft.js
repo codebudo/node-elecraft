@@ -4,13 +4,13 @@
 var SerialPort   = require('serialport');
 var util         = require('util');
 var EventEmitter = require('eventemitter2').EventEmitter2;
-var log       = require('./logger.js');
-log.set(log.DEBUG);
+var log          = require('./logger.js');
+//log.set(log.DEBUG);
 
 // configs
 var serialPortName = "/dev/cu.usbserial-A501XQ4S";
 
-log.trace("Starting...");
+log.verbose("Starting...");
 
 function Elecraft(){
   var self = this;
@@ -18,7 +18,7 @@ function Elecraft(){
 
 
   this.list = function(cb){
-    log.trace("Get list of available ports");
+    log.verbose("Get list of available ports");
     SerialPort.list(function(err,ports){
       ("function" == typeof cb)?cb(ports):"";
     });
@@ -40,7 +40,7 @@ function Elecraft(){
     if( !!port )
       serialPortName = port;
 
-    log.trace("Connecting...");
+    log.verbose("Connecting...");
     var SP = SerialPort.SerialPort;
 
     validatePort(serialPortName, function(err){
@@ -49,17 +49,23 @@ function Elecraft(){
         log.error("Port not found. Exiting.");
         process.exit(); 
       }
-      log.trace("Found port " + serialPortName);
+      log.verbose("Found port " + serialPortName);
     
       var kx3 = new SP(serialPortName, {
         baudrate: 4800,
       }, false);
 
+      kx3.on('error', log.error);
+      kx3.on('close', function(e){
+        log.info('closed');
+        log.verbose(e);
+      });
+
       kx3.on('open', function(){
         var buffer = '';
         log.info('open');
         kx3.on('data', function(data){
-          log.trace("data: "+data);
+          log.verbose("data: "+data);
           if( data != undefined )
             buffer += data;
           var index = buffer.indexOf(';');
@@ -71,6 +77,7 @@ function Elecraft(){
 
         });
 
+        // engage autoInfoMode
         kx3.write('AI1;', function(err,results){
           if( err ){
             log.error("err "+err);
@@ -88,7 +95,7 @@ function Elecraft(){
 
 
   this.processCommand = function(raw){
-    log.trace('>'+raw);
+    log.verbose('>'+raw);
 
     var three = commands[raw.substr(0,3)];
     var two   = commands[raw.substr(0,2)];
@@ -97,17 +104,17 @@ function Elecraft(){
 
     // TODO build n-tree for this. It will be faster and not fugly.
     if(three != undefined ){
-      log.trace(three);
+      log.verbose(three);
       three.code = raw.substr(0,3);
       self.emit(three.name, new KEvent(three, raw));
     } else 
     if(two !== undefined ){
-      log.trace(two);
+      log.verbose(two);
       two.code = raw.substr(0,2);
       self.emit(two.name, new KEvent(two, raw));
     } else 
     if(one !== undefined ){
-      log.trace(one);
+      log.verbose(one);
       one.code = raw.substr(0,1);
       self.emit(one.name, new KEvent(one, raw));
     }
@@ -130,11 +137,15 @@ function Elecraft(){
     "?":    {name:"busy",
              description: "busy"},
     "AG":   {name:"AFGainVFOA",
-             parser: function(e){e.AFGainVFOA=parseInt(e.data)},
-             description: "AF gain VFO-A"},
+             description: "AF gain VFO-A",
+             parser: function(e){
+               e.AFGainVFOA=parseInt(e.data)
+            }},
     "AG$":  {name:"AFGainVFOB",
-             parser: function(e){e.AFGainVFOB=parseInt(e.data)},
-             description: "AF gain VFO-B"},
+             description: "AF gain VFO-B",
+             parser: function(e){
+               e.AFGainVFOB=parseInt(e.data);
+            }},
     "AI":   {name:"AutoInfoMode",
              description: "Auto-Info mode",
              parser: function(e){
@@ -226,7 +237,7 @@ function Elecraft(){
                // This could be a problem with the API and docs or a bug in
                // node-serialport. Much researchings...
                var zeros = '0000000000000000';
-               e.display = e.data.substr(0,8);
+               e.display = e.data.substr(2,8);
                var output = [];
 
                var allBinary='';
@@ -243,10 +254,10 @@ function Elecraft(){
                  var thisChar = String.fromCharCode(charCode);
                  output.push( thisChar );
 
-                 log.trace( thisChar+' '+binaryValue+' '+charCode );
+                 log.verbose( thisChar+' '+binaryValue+' '+charCode );
                }
-               //log.trace( output.join('') );
-               //log.trace( allBinary );
+               //log.verbose( output.join('') );
+               //log.verbose( allBinary );
                               
             }},
     "DT":   {name:"dataMode",
@@ -286,12 +297,12 @@ function Elecraft(){
     "FA":   {name:"frequencyVFOA",
              description:"VFO-A Frequency", 
              parser: function(e){
-               e.frequencyVFOA = parseInt(e.data);
+               e.frequencyVFOA = parseInt(e.data.substr(2));
             }},
     "FB":   {name:"frequencyVFOB",
              description:"VFO-B Frequency", 
              parser: function(e){
-               e.frequencyVFOB = parseInt(e.data);
+               e.frequencyVFOB = parseInt(e.data.substr(3));
             }},
     "FI":   {name:"IFCenterFrequency",
              description:"I.F. center frequency", 
@@ -335,7 +346,6 @@ function Elecraft(){
     "IF":   {name:"GeneralInformation",
              description: "General information", 
              parser: function(e){
-               //e.frequencyVFOA=14.268000; // TODO this is obviously wrong
                // e.frequencyVFOA = parseInt(e.data.substr(2));
             }},
     "IO":   {description:"Internal Use Only"}, 
@@ -1033,9 +1043,9 @@ function Elecraft(){
 }
 
 util.inherits(Elecraft, EventEmitter);
-//log.trace(foo.prototype);
-//log.trace(foo.super_);
-//log.trace(foo instanceof EventEmitter);
+//log.verbose(foo.prototype);
+//log.verbose(foo.super_);
+//log.verbose(foo instanceof EventEmitter);
 
 
 module.exports = new Elecraft();
@@ -1046,7 +1056,7 @@ var foo = new Elecraft();
 foo.list();
 foo.connect();
 foo.on('GeneralInformation', function(e){
-  log.trace( e );
+  log.verbose( e );
 });
 */
 
