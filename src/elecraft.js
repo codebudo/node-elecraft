@@ -673,7 +673,7 @@ function Elecraft(){
                var nb = e.data.substr(2);
                e.noiseBlankerVFOA = nb=='1'?true:false;
             }}, 
-    "NB$":  {name:"noiseBlankerVFOA",
+    "NB$":  {name:"noiseBlankerVFOB",
              description:"Noise Blanketer VFO-B",
              parser: function(e){
                var nb = e.data.substr(3);
@@ -708,19 +708,19 @@ function Elecraft(){
                var val = e.data.substr(3);
                e.recievePreampVFOB = val=='1'?true:false;
             }}, 
-    "PC":   {name:"powerOutputLevel",
+    "PC":   {name:"requestedPowerOutputLevel",
              description:"Requested Power Output Level", 
              parser: function(e){
                var val = e.data.substr(2);
-               e.recievePreampVFOB = val=='1'?true:false;
+               e.powerOutputLevel = val=='1'?true:false;
             }}, 
     /*"PN":   {name:"",
              description:"Internal Use Only"}, 
              parser: function(e){
                // TODO
             }}, */
-    "PO":   {name:"powerOutputLevel",
-             description:"Power Output Read", 
+    "PO":   {name:"actualPowerOutputLevel",
+             description:"Actual Power Output Level", 
              parser: function(e){
                var val = e.data.substr(2);
                e.powerOutputLevel = parseInt(val);
@@ -737,7 +737,7 @@ function Elecraft(){
                var val = e.data.substr(2);
                e.recieveAttenuatorVFOB = val=='1'?true:false;
             }}, 
-    "RA$":  {name:"receiveAttenuatorVFOA",
+    "RA$":  {name:"receiveAttenuatorVFOB",
              description:"RX attenuator on/off VFO-B", 
              parser: function(e){
                var val = e.data.substr(3);
@@ -807,14 +807,12 @@ function Elecraft(){
     "SM":   {name:"sMeterVFOA",
              description:"S-meter VFO-A", 
              parser: function(e){
-               var val = e.data.substr(2);
-               e.sMeterVFOA = sMeterParseBasic(val);
+               e.sMeterVFOA = sMeterParseBasic(e);
             }}, 
     "SM$":  {name:"sMeterVFOB",
              description:"S-meter VFO-B", 
              parser: function(e){
-               var val = e.data.substr(3);
-               e.sMeterVFOB = sMeterParseBasic(val);
+               e.sMeterVFOB = sMeterParseBasic(e);
             }}, 
     "SMH":  {name:"highResSMeter",
              description:"High-res S-Meter",  // K3 only

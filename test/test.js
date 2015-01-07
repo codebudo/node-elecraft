@@ -15,7 +15,6 @@ describe('Elecraft', function(){
       });
     })
   });
-
   describe('#processCommand("?")', function(){
     it('should emit a "busy" event', function(done){
       kx.on('busy', function(e){
@@ -241,7 +240,6 @@ describe('Elecraft', function(){
       kx.processCommand('FW');
     });
   });
-  /* Deprecated. Use 'BW'.
   describe('#processCommand("FW$")', function(){
     it('should emit a "filterBandwidthVFOB" event', function(done){
       kx.on('filterBandwidthVFOB', function(e){
@@ -249,8 +247,7 @@ describe('Elecraft', function(){
       });
       kx.processCommand('FW$');
     });
-  });
-  */
+  }); */
   describe('#processCommand("GT")', function(){
     it('should emit a "agcSpeed" event', function(done){
       kx.on('agcSpeed', function(e){
@@ -393,6 +390,358 @@ describe('Elecraft', function(){
         done();
       });
       kx.processCommand('MP');
+    });
+  });
+  describe('#processCommand("MQ")', function(){
+    it('should emit a "menuParameter16" event', function(done){
+      kx.on('menuParameter16', function(e){
+        done();
+      });
+      kx.processCommand('MQ');
+    });
+  });
+  describe('#processCommand("NB")', function(){
+    it('should emit a "noiseBlankerVFOA" event', function(done){
+      kx.on('noiseBlankerVFOA', function(e){
+        done();
+      });
+      kx.processCommand('NB');
+    });
+  });
+  describe('#processCommand("NB$")', function(){
+    it('should emit a "noiseBlankerVFOA" event', function(done){
+      kx.on('noiseBlankerVFOB', function(e){
+        done();
+      });
+      kx.processCommand('NB$');
+    });
+  });
+  describe('#processCommand("NL")', function(){
+    it('should emit a "noiseBlankerLevelVFOA" event', function(done){
+      kx.on('noiseBlankerLevelVFOA', function(e){
+        done();
+      });
+      kx.processCommand('NL');
+    });
+  });
+  describe('#processCommand("NL$")', function(){
+    it('should emit a "noiseBlankerLevelVFOB" event', function(done){
+      kx.on('noiseBlankerLevelVFOB', function(e){
+        done();
+      });
+      kx.processCommand('NL$');
+    });
+  });
+  describe('#processCommand("OM")', function(){
+    it('should emit a "optionModuleQuery" event', function(done){
+      kx.on('optionModuleQuery', function(e){
+        done();
+      });
+      kx.processCommand('OM');
+    });
+  });
+  describe('#processCommand("PA")', function(){
+    it('should emit a "receivePreampVFOA" event', function(done){
+      kx.on('receivePreampVFOA', function(e){
+        done();
+      });
+      kx.processCommand('PA');
+    });
+  });
+  describe('#processCommand("PA$")', function(){
+    it('should emit a "receivePreampVFOB" event', function(done){
+      kx.on('receivePreampVFOB', function(e){
+        done();
+      });
+      kx.processCommand('PA$');
+    });
+  });
+  describe('#processCommand("PC")', function(){
+    it('should emit a "requestedPowerOutputLevel" event', function(done){
+      kx.on('requestedPowerOutputLevel', function(e){
+        done();
+      });
+      kx.processCommand('PC');
+    });
+  });
+  describe('#processCommand("PO")', function(){
+    it('should emit a "actualPowerOutputLevel" event', function(done){
+      kx.on('actualPowerOutputLevel', function(e){
+        done();
+      });
+      kx.processCommand('PO');
+    });
+  });
+  describe('#processCommand("PS")', function(){
+    it('should emit a "powerStatus" event', function(done){
+      kx.on('powerStatus', function(e){
+        done();
+      });
+      kx.processCommand('PS');
+    });
+  });
+  describe('#processCommand("RA")', function(){
+    it('should emit a "receiveAttenuatorVFOA" event', function(done){
+      kx.on('receiveAttenuatorVFOA', function(e){
+        done();
+      });
+      kx.processCommand('RA');
+    });
+  });
+  describe('#processCommand("RA$")', function(){
+    it('should emit a "receiveAttenuatorVFOB" event', function(done){
+      kx.on('receiveAttenuatorVFOB', function(e){
+        done();
+      });
+      kx.processCommand('RA$');
+    });
+  });
+  describe('#processCommand("RC")', function(){
+    it('should emit a "RITXITClear" event', function(done){
+      kx.on('RITXITClear', function(e){
+        done();
+      });
+      kx.processCommand('RC');
+    });
+  });
+  describe('#processCommand("RD")', function(){
+    it('should emit a "RITDown" event', function(done){
+      kx.on('RITDown', function(e){
+        done();
+      });
+      kx.processCommand('RD');
+    });
+  });
+  describe('#processCommand("RG")', function(){
+    it('should emit a "RFGainVFOA" event', function(done){
+      kx.on('RFGainVFOA', function(e){
+        done();
+      });
+      kx.processCommand('RG');
+    });
+  });
+  describe('#processCommand("RG$")', function(){
+    it('should emit a "RFGainVFOB" event', function(done){
+      kx.on('RFGainVFOB', function(e){
+        done();
+      });
+      kx.processCommand('RG$');
+    });
+  });
+  describe('#processCommand("RO")', function(){
+    it('should emit a "RITXITOffset" event', function(done){
+      kx.on('RITXITOffset', function(e){
+        done();
+      });
+      kx.processCommand('RO');
+    });
+  });
+  describe('#processCommand("RT")', function(){
+    it('should emit a "RITEnabled" event', function(done){
+      kx.on('RITEnabled', function(e){
+        done();
+      });
+      kx.processCommand('RT');
+    });
+  });
+  describe('#processCommand("RU")', function(){
+    it('should emit a "RITUp" event', function(done){
+      kx.on('RITUp', function(e){
+        done();
+      });
+      kx.processCommand('RU');
+    });
+  });
+  describe('#processCommand("RV")', function(){
+    it('should emit a "firmwareRevision" event', function(done){
+      kx.on('firmwareRevision', function(e){
+        done();
+      });
+      kx.processCommand('RV');
+    });
+  });
+  describe('#processCommand("RX")', function(){
+    it('should emit a "receiveMode" event', function(done){
+      kx.on('receiveMode', function(e){
+        done();
+      });
+      kx.processCommand('RX');
+    });
+  });
+  describe('#processCommand("SB")', function(){
+    it('should emit a "dualWatchEnabled" event', function(done){
+      kx.on('dualWatchEnabled', function(e){
+        done();
+      });
+      kx.processCommand('SB');
+    });
+  });
+  describe('#processCommand("SD")', function(){
+    it('should emit a "semiBreakInDelay" event', function(done){
+      kx.on('semiBreakInDelay', function(e){
+        done();
+      });
+      kx.processCommand('SD');
+    });
+  });
+  describe('#processCommand("SM")', function(){
+    it('should emit a "sMeterVFOA" event', function(done){
+      kx.on('sMeterVFOA', function(e){
+        done();
+      });
+      kx.processCommand('SM');
+    });
+  });
+  describe('#processCommand("SM$")', function(){
+    it('should emit a "sMeterVFOB" event', function(done){
+      kx.on('sMeterVFOB', function(e){
+        done();
+      });
+      kx.processCommand('SM$');
+    });
+  });
+  describe('#processCommand("SMH")', function(){
+    it('should emit a "highResSMeter" event', function(done){
+      kx.on('highResSMeter', function(e){
+        done();
+      });
+      kx.processCommand('SMH');
+    });
+  });
+  describe('#processCommand("SP")', function(){
+    it('should emit a "specialFunctions" event', function(done){
+      kx.on('specialFunctions', function(e){
+        done();
+      });
+      kx.processCommand('SP');
+    });
+  });
+  describe('#processCommand("SPG")', function(){
+    it('should emit a "ADCGroundReference" event', function(done){
+      kx.on('ADCGroundReference', function(e){
+        done();
+      });
+      kx.processCommand('SPG');
+    });
+  });
+  describe('#processCommand("SQ")', function(){
+    it('should emit a "squelchLevelVFOA" event', function(done){
+      kx.on('squelchLevelVFOA', function(e){
+        done();
+      });
+      kx.processCommand('SQ');
+    });
+  });
+  describe('#processCommand("SQ$")', function(){
+    it('should emit a "squelchLevelVFOB" event', function(done){
+      kx.on('squelchLevelVFOB', function(e){
+        done();
+      });
+      kx.processCommand('SQ$');
+    });
+  });
+  describe('#processCommand("SWH")', function(){
+    it('should emit a "switchEmulationHold" event', function(done){
+      kx.on('switchEmulationHold', function(e){
+        done();
+      });
+      kx.processCommand('SWH');
+    });
+  });
+  describe('#processCommand("SWT")', function(){
+    it('should emit a "switchEmulationTap" event', function(done){
+      kx.on('switchEmulationTap', function(e){
+        done();
+      });
+      kx.processCommand('SWT');
+    });
+  });
+  describe('#processCommand("TB")', function(){
+    it('should emit a "receivedText" event', function(done){
+      kx.on('receivedText', function(e){
+        done();
+      });
+      kx.processCommand('TB');
+    });
+  });
+  describe('#processCommand("TE")', function(){
+    it('should emit a "transmitEQ" event', function(done){
+      kx.on('transmitEQ', function(e){
+        done();
+      });
+      kx.processCommand('TE');
+    });
+  });
+  describe('#processCommand("TQ")', function(){
+    it('should emit a "transmitQuery" event', function(done){
+      kx.on('transmitQuery', function(e){
+        done();
+      });
+      kx.processCommand('TQ');
+    });
+  });
+  describe('#processCommand("TT")', function(){
+    it('should emit a "textToTerminal" event', function(done){
+      kx.on('textToTerminal', function(e){
+        done();
+      });
+      kx.processCommand('TT');
+    });
+  });
+  describe('#processCommand("TX")', function(){
+    it('should emit a "transmitMode" event', function(done){
+      kx.on('transmitMode', function(e){
+        done();
+      });
+      kx.processCommand('TX');
+    });
+  });
+  describe('#processCommand("UP")', function(){
+    it('should emit a "frequencyUpVFOA" event', function(done){
+      kx.on('frequencyUpVFOA', function(e){
+        done();
+      });
+      kx.processCommand('UP');
+    });
+  });
+  describe('#processCommand("UPB")', function(){
+    it('should emit a "frequencyUpVFOB" event', function(done){
+      kx.on('frequencyUpVFOB', function(e){
+        done();
+      });
+      kx.processCommand('UPB');
+    });
+  });
+  describe('#processCommand("VX")', function(){
+    it('should emit a "VOXEnabled" event', function(done){
+      kx.on('VOXEnabled', function(e){
+        done();
+      });
+      kx.processCommand('VX');
+    });
+  });
+  describe('#processCommand("XF")', function(){
+    it('should emit a "XFILSelectionVFOA" event', function(done){
+      kx.on('XFILSelectionVFOA', function(e){
+        done();
+      });
+      kx.processCommand('XF');
+    });
+  });
+  describe('#processCommand("XF$")', function(){
+    it('should emit a "XFILSelectionVFOB" event', function(done){
+      kx.on('XFILSelectionVFOB', function(e){
+        done();
+      });
+      kx.processCommand('XF$');
+    });
+  });
+  describe('#processCommand("XT")', function(){
+    it('should emit a "XITEnabled" event', function(done){
+      kx.on('XITEnabled', function(e){
+        done();
+      });
+      kx.processCommand('XT');
     });
   });
 });
