@@ -82,7 +82,7 @@ describe('Elecraft', function(){
   describe('#processCommand("BR0")', function(){
     it('should emit a "baudRate" event', function(done){
       kx.on('baudRate', function(e){
-        if( e.baudRate === 4800 )
+        if( e.data.baudRate === 4800 )
           done();
       });
       kx.processCommand('BR0');
@@ -91,7 +91,7 @@ describe('Elecraft', function(){
   describe('#processCommand("BR2")', function(){
     it('should emit a "baudRate" event', function(done){
       kx.on('baudRate', function(e){
-        if( e.baudRate === 9600 )
+        if( e.data.baudRate === 9600 )
           done();
       });
       kx.processCommand('BR2');
@@ -100,7 +100,7 @@ describe('Elecraft', function(){
   describe('#processCommand("BR3")', function(){
     it('should emit a "baudRate" event', function(done){
       kx.on('baudRate', function(e){
-        if( e.baudRate === 38400 )
+        if( e.data.baudRate === 38400 )
           done();
       });
       kx.processCommand('BR3');
@@ -149,7 +149,7 @@ describe('Elecraft', function(){
   describe('#processCommand("DL2")', function(){
     it('should emit a "dspCommandTrace" event', function(done){
       kx.on('dspCommandTrace', function(e){
-        if( !e.dspDebug )
+        if( !e.data.dspDebug )
           done();
       });
       kx.processCommand('DL2');
@@ -158,7 +158,7 @@ describe('Elecraft', function(){
   describe('#processCommand("DL3")', function(){
     it('should emit a "dspCommandTrace" event', function(done){
       kx.on('dspCommandTrace', function(e){
-        if( e.dspDebug )
+        if( e.data.dspDebug )
           done();
       });
       kx.processCommand('DL3');
@@ -191,7 +191,7 @@ describe('Elecraft', function(){
   describe('#processCommand("DT0")', function(){
     it('should emit a "dataMode" event', function(done){
       kx.on('dataMode', function(e){
-        if( e.dataMode === 'DATA A' )
+        if( e.data.dataMode === 'DATA A' )
           done();
       });
       kx.processCommand('DT0');
@@ -200,7 +200,7 @@ describe('Elecraft', function(){
   describe('#processCommand("DT1")', function(){
     it('should emit a "dataMode" event', function(done){
       kx.on('dataMode', function(e){
-        if( e.dataMode === 'AFSK A' )
+        if( e.data.dataMode === 'AFSK A' )
           done();
       });
       kx.processCommand('DT1');
@@ -209,7 +209,7 @@ describe('Elecraft', function(){
   describe('#processCommand("DT2")', function(){
     it('should emit a "dataMode" event', function(done){
       kx.on('dataMode', function(e){
-        if( e.dataMode === 'FSK D' )
+        if( e.data.dataMode === 'FSK D' )
           done();
       });
       kx.processCommand('DT2');
@@ -218,7 +218,7 @@ describe('Elecraft', function(){
   describe('#processCommand("DT3")', function(){
     it('should emit a "dataMode" event', function(done){
       kx.on('dataMode', function(e){
-        if( e.dataMode === 'PSK D' )
+        if( e.data.dataMode === 'PSK D' )
           done();
       });
       kx.processCommand('DT3');
@@ -404,7 +404,7 @@ describe('Elecraft', function(){
   describe('#processCommand("MD1")', function(){
     it('should emit a "operatingModeVFOA" event', function(done){
       kx.on('operatingModeVFOA', function(e){
-        if( e.operatingModeVFOA === 'LSB')
+        if( e.data.operatingModeVFOA === 'LSB')
           done();
       });
       kx.processCommand('MD1');
@@ -413,7 +413,7 @@ describe('Elecraft', function(){
   describe('#processCommand("MD2")', function(){
     it('should emit a "operatingModeVFOA" event', function(done){
       kx.on('operatingModeVFOA', function(e){
-        if( e.operatingModeVFOA === 'USB')
+        if( e.data.operatingModeVFOA === 'USB')
           done();
       });
       kx.processCommand('MD2');
@@ -422,7 +422,7 @@ describe('Elecraft', function(){
   describe('#processCommand("MD3")', function(){
     it('should emit a "operatingModeVFOA" event', function(done){
       kx.on('operatingModeVFOA', function(e){
-        if( e.operatingModeVFOA === 'CW')
+        if( e.data.operatingModeVFOA === 'CW')
           done();
       });
       kx.processCommand('MD3');
@@ -431,7 +431,7 @@ describe('Elecraft', function(){
   describe('#processCommand("MD4")', function(){
     it('should emit a "operatingModeVFOA" event', function(done){
       kx.on('operatingModeVFOA', function(e){
-        if( e.operatingModeVFOA === 'FM')
+        if( e.data.operatingModeVFOA === 'FM')
           done();
       });
       kx.processCommand('MD4');
@@ -440,7 +440,7 @@ describe('Elecraft', function(){
   describe('#processCommand("MD5")', function(){
     it('should emit a "operatingModeVFOA" event', function(done){
       kx.on('operatingModeVFOA', function(e){
-        if( e.operatingModeVFOA === 'AM')
+        if( e.data.operatingModeVFOA === 'AM')
           done();
       });
       kx.processCommand('MD5');
@@ -449,7 +449,7 @@ describe('Elecraft', function(){
   describe('#processCommand("MD6")', function(){
     it('should emit a "operatingModeVFOA" event', function(done){
       kx.on('operatingModeVFOA', function(e){
-        if( e.operatingModeVFOA === 'DATA')
+        if( e.data.operatingModeVFOA === 'DATA')
           done();
       });
       kx.processCommand('MD6');
@@ -458,7 +458,7 @@ describe('Elecraft', function(){
   describe('#processCommand("MD7")', function(){
     it('should emit a "operatingModeVFOA" event', function(done){
       kx.on('operatingModeVFOA', function(e){
-        if( e.operatingModeVFOA === 'CW-REV')
+        if( e.data.operatingModeVFOA === 'CW-REV')
           done();
       });
       kx.processCommand('MD7');
@@ -467,7 +467,7 @@ describe('Elecraft', function(){
   describe('#processCommand("MD9")', function(){
     it('should emit a "operatingModeVFOA" event', function(done){
       kx.on('operatingModeVFOA', function(e){
-        if( e.operatingModeVFOA === 'DATA-REV')
+        if( e.data.operatingModeVFOA === 'DATA-REV')
           done();
       });
       kx.processCommand('MD9');
