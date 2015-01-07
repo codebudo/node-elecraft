@@ -79,12 +79,31 @@ describe('Elecraft', function(){
       kx.processCommand('BN$');
     });
   });
-  describe('#processCommand("BR")', function(){
+  describe('#processCommand("BR0")', function(){
     it('should emit a "baudRate" event', function(done){
       kx.on('baudRate', function(e){
-        done();
+        if( e.baudRate === 4800 )
+          done();
       });
-      kx.processCommand('BR');
+      kx.processCommand('BR0');
+    });
+  });
+  describe('#processCommand("BR2")', function(){
+    it('should emit a "baudRate" event', function(done){
+      kx.on('baudRate', function(e){
+        if( e.baudRate === 9600 )
+          done();
+      });
+      kx.processCommand('BR2');
+    });
+  });
+  describe('#processCommand("BR3")', function(){
+    it('should emit a "baudRate" event', function(done){
+      kx.on('baudRate', function(e){
+        if( e.baudRate === 38400 )
+          done();
+      });
+      kx.processCommand('BR3');
     });
   });
   describe('#processCommand("BW")', function(){
@@ -127,12 +146,22 @@ describe('Elecraft', function(){
       kx.processCommand('DB');
     });
   });
-  describe('#processCommand("DL")', function(){
+  describe('#processCommand("DL2")', function(){
     it('should emit a "dspCommandTrace" event', function(done){
       kx.on('dspCommandTrace', function(e){
-        done();
+        if( !e.dspDebug )
+          done();
       });
-      kx.processCommand('DL');
+      kx.processCommand('DL2');
+    });
+  });
+  describe('#processCommand("DL3")', function(){
+    it('should emit a "dspCommandTrace" event', function(done){
+      kx.on('dspCommandTrace', function(e){
+        if( e.dspDebug )
+          done();
+      });
+      kx.processCommand('DL3');
     });
   });
   describe('#processCommand("DN")', function(){
@@ -159,12 +188,40 @@ describe('Elecraft', function(){
       kx.processCommand('DS');
     });
   });
-  describe('#processCommand("DT")', function(){
+  describe('#processCommand("DT0")', function(){
     it('should emit a "dataMode" event', function(done){
       kx.on('dataMode', function(e){
-        done();
+        if( e.dataMode === 'DATA A' )
+          done();
       });
-      kx.processCommand('DT');
+      kx.processCommand('DT0');
+    });
+  });
+  describe('#processCommand("DT1")', function(){
+    it('should emit a "dataMode" event', function(done){
+      kx.on('dataMode', function(e){
+        if( e.dataMode === 'AFSK A' )
+          done();
+      });
+      kx.processCommand('DT1');
+    });
+  });
+  describe('#processCommand("DT2")', function(){
+    it('should emit a "dataMode" event', function(done){
+      kx.on('dataMode', function(e){
+        if( e.dataMode === 'FSK D' )
+          done();
+      });
+      kx.processCommand('DT2');
+    });
+  });
+  describe('#processCommand("DT3")', function(){
+    it('should emit a "dataMode" event', function(done){
+      kx.on('dataMode', function(e){
+        if( e.dataMode === 'PSK D' )
+          done();
+      });
+      kx.processCommand('DT3');
     });
   });
   describe('#processCommand("DV")', function(){
@@ -344,12 +401,76 @@ describe('Elecraft', function(){
       kx.processCommand('MC');
     });
   });
-  describe('#processCommand("MD")', function(){
+  describe('#processCommand("MD1")', function(){
     it('should emit a "operatingModeVFOA" event', function(done){
       kx.on('operatingModeVFOA', function(e){
-        done();
+        if( e.operatingModeVFOA === 'LSB')
+          done();
       });
-      kx.processCommand('MD');
+      kx.processCommand('MD1');
+    });
+  });
+  describe('#processCommand("MD2")', function(){
+    it('should emit a "operatingModeVFOA" event', function(done){
+      kx.on('operatingModeVFOA', function(e){
+        if( e.operatingModeVFOA === 'USB')
+          done();
+      });
+      kx.processCommand('MD2');
+    });
+  });
+  describe('#processCommand("MD3")', function(){
+    it('should emit a "operatingModeVFOA" event', function(done){
+      kx.on('operatingModeVFOA', function(e){
+        if( e.operatingModeVFOA === 'CW')
+          done();
+      });
+      kx.processCommand('MD3');
+    });
+  });
+  describe('#processCommand("MD4")', function(){
+    it('should emit a "operatingModeVFOA" event', function(done){
+      kx.on('operatingModeVFOA', function(e){
+        if( e.operatingModeVFOA === 'FM')
+          done();
+      });
+      kx.processCommand('MD4');
+    });
+  });
+  describe('#processCommand("MD5")', function(){
+    it('should emit a "operatingModeVFOA" event', function(done){
+      kx.on('operatingModeVFOA', function(e){
+        if( e.operatingModeVFOA === 'AM')
+          done();
+      });
+      kx.processCommand('MD5');
+    });
+  });
+  describe('#processCommand("MD6")', function(){
+    it('should emit a "operatingModeVFOA" event', function(done){
+      kx.on('operatingModeVFOA', function(e){
+        if( e.operatingModeVFOA === 'DATA')
+          done();
+      });
+      kx.processCommand('MD6');
+    });
+  });
+  describe('#processCommand("MD7")', function(){
+    it('should emit a "operatingModeVFOA" event', function(done){
+      kx.on('operatingModeVFOA', function(e){
+        if( e.operatingModeVFOA === 'CW-REV')
+          done();
+      });
+      kx.processCommand('MD7');
+    });
+  });
+  describe('#processCommand("MD9")', function(){
+    it('should emit a "operatingModeVFOA" event', function(done){
+      kx.on('operatingModeVFOA', function(e){
+        if( e.operatingModeVFOA === 'DATA-REV')
+          done();
+      });
+      kx.processCommand('MD9');
     });
   });
   describe('#processCommand("MD$")', function(){

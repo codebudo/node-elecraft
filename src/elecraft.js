@@ -176,7 +176,7 @@ function Elecraft(){
     "BR":   {name:"baudRate",
              description:"Baud rate set",
              parser: function(e){
-               switch(parseInt(e.data)){
+               switch(parseInt(e.data.substr(2))){
                  case 0:
                    e.baudRate = 4800;
                    break;
@@ -216,9 +216,9 @@ function Elecraft(){
     "DL":   {name:"dspCommandTrace",
              description:"DSP command trace",
              parser: function(e){
-               if( e.data == '2')
+               if( e.data.substr(2) === '2')
                  e.dspDebug = false
-               if( e.data == '3')
+               if( e.data.substr(2) === '3')
                  e.dspDebug = true;
             }},
     "DM":   {description:"Internal Use Only"},
@@ -263,7 +263,7 @@ function Elecraft(){
     "DT":   {name:"dataMode",
              description:"Data sub-mode",
              parser: function(e){
-               switch(parseInt(e.data)){
+               switch(parseInt(e.data.substr(2))){
                  case 0:
                    e.dataMode = 'DATA A';
                    break;
