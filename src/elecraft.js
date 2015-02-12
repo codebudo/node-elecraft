@@ -425,210 +425,23 @@ function Elecraft(){
              parser: function(e){
                // TODO this is big. Every menu item on the K3
                var menuItem = parseInt(e.raw.substr(2));
-               switch(menuItem){
-                 case 0: e.data.menuItem = "ALARM"; break;
-                 case 1: e.data.menuItem = "IAMBIC"; break;
-                 case 2: e.data.menuItem = "LCD ADJ"; break;
-                 case 3: e.data.menuItem = "LCD BRT"; break;
-                 case 4: e.data.menuItem = "LED BRT"; break;
-                 case 5: e.data.menuItem = "MSG RPT"; break;
-                 case 6: e.data.menuItem = "PADDLE"; break;
-                 case 7: e.data.menuItem = "RPT OFS"; break;
-                 case 8: e.data.menuItem = "RX EQ"; break;
-                 case 9: e.data.menuItem = "TX EQ"; break;
-
-                 case 10: e.data.menuItem = "VOX GN"; break;
-                 case 11: e.data.menuItem = "ANTIVOX"; break;
-                 case 12: e.data.menuItem = "WEIGHT"; break;
-                 case 13: e.data.menuItem = "2 TONE"; break;
-                 case 14: e.data.menuItem = "AFV TIM"; break;
-                 case 15: e.data.menuItem = "MIC+LIN"; break;
-                 case 16: e.data.menuItem = "TX DLY"; break;
-                 case 17: e.data.menuItem = "AGC SLP"; break;
-                 case 18: e.data.menuItem = "FM MODE"; break;
-                 case 19: e.data.menuItem = "DIGOUT1"; break;
-
-                 case 20: e.data.menuItem = "AGC HLD"; break;
-                 case 21: e.data.menuItem = "FM DEV"; break;
-                 case 22: e.data.menuItem = "EXT ALC"; break;
-                 case 23: e.data.menuItem = "KAT3"; break;
-                 case 24: e.data.menuItem = "BAT MIN"; break;
-                 case 25: e.data.menuItem = "TX INH"; break;
-                 case 26: e.data.menuItem = "SER NUM"; break;
-                 case 27: e.data.menuItem = "TXG VCE"; break;
-                 case 28: e.data.menuItem = "FW REVS"; break;
-                 case 29: e.data.menuItem = "DATE"; break;
-
-                 case 30: e.data.menuItem = "DATE MD"; break;
-                 case 31: e.data.menuItem = "DDS FRQ"; break;
-                 case 32: e.data.menuItem = "LIN OUT"; break;
-                 case 33: e.data.menuItem = "KIO3"; break;
-                 case 34: e.data.menuItem = "ADC REF"; break;
-                 case 35: e.data.menuItem = "RFI DET"; break;
-                 case 36: e.data.menuItem = "KDVR3"; break;
-                 case 37: e.data.menuItem = "AGC-S"; break;
-                 case 38: e.data.menuItem = "FLx BW"; break;
-                 case 39: e.data.menuItem = "FLx FRQ"; break;
-
-                 case 40: e.data.menuItem = "FLx GN"; break;
-                 case 41: e.data.menuItem = "FLx ON"; break;
-                 case 42: e.data.menuItem = "FLTX md"; break;
-                 case 43: e.data.menuItem = "FP TEMP"; break;
-                 case 44: e.data.menuItem = "FSK POL"; break;
-                 case 45: e.data.menuItem = "AUTOINF"; break;
-                 case 46: e.data.menuItem = "KBPF3"; break;
-                 case 47: e.data.menuItem = "AF LIM"; break;
-                 case 48: e.data.menuItem = "KNB3"; break;
-                 case 49: e.data.menuItem = "AF LIM"; break;
-
-                 case 50: e.data.menuItem = "KRX3"; break;
-                 case 51: e.data.menuItem = "KXV3"; break;
-                 case 52: e.data.menuItem = "LCD TST"; break;
-                 case 53: e.data.menuItem = "MIC SEL"; break;
-                 case 54: e.data.menuItem = "NB SAVE"; break;
-                 case 55: e.data.menuItem = "KPA3"; break;
-                 case 56: e.data.menuItem = "PA TEMP"; break;
-                 case 57: e.data.menuItem = "RS232"; break;
-                 case 58: e.data.menuItem = "TUN PWR"; break;
-                 case 59: e.data.menuItem = "SYNC DT"; break;
-
-                 case 60: e.data.menuItem = "SMTR MD"; break;
-                 case 61: e.data.menuItem = "AGC-F"; break;
-                 case 62: e.data.menuItem = "REF CAL"; break;
-                 case 63: e.data.menuItem = "SQ MIN"; break;
-                 case 64: e.data.menuItem = "SQ SUB"; break;
-                 case 65: e.data.menuItem = "SMTR OF"; break;
-                 case 66: e.data.menuItem = "SMTR SC"; break;
-                 case 67: e.data.menuItem = "SMTR PK"; break;
-                 case 68: e.data.menuItem = "SPLT SV"; break;
-                 case 69: e.data.menuItem = "SPKRS"; break;
-
-                 case 70: e.data.menuItem = "SW TEST"; break;
-                 case 71: e.data.menuItem = "SW TONE"; break;
-                 case 72: e.data.menuItem = "TECH MD"; break;
-                 case 73: e.data.menuItem = "TIME"; break;
-                 case 74: e.data.menuItem = "AGC THR"; break;
-                 case 75: e.data.menuItem = "PTT RLS"; break;
-                 case 76: e.data.menuItem = "BND MAP"; break;
-                 case 77: e.data.menuItem = "TTY LTR"; break;
-                 case 78: e.data.menuItem = "TX ALC"; break;
-                 case 79: e.data.menuItem = "TXGN pwr"; break;
-
-                 case 80: e.data.menuItem = "SUB AF"; break;
-                 case 81: e.data.menuItem = "PWR SET"; break;
-                 case 82: e.data.menuItem = "MIC BTN"; break;
-                 case 83: e.data.menuItem = "VCO MD"; break;
-                 case 84: e.data.menuItem = "VFO CTS"; break;
-                 case 85: e.data.menuItem = "VFO FST"; break;
-                 case 86: e.data.menuItem = "VFO IND"; break;
-                 case 87: e.data.menuItem = "VFO OFS"; break;
-                 case 88: e.data.menuItem = "WMTR pwr"; break;
-                 case 89: e.data.menuItem = "XVx ON"; break;
-
-                 case 90: e.data.menuItem = "XVx RF"; break;
-                 case 91: e.data.menuItem = "XVx IF"; break;
-                 case 92: e.data.menuItem = "XVx PWR"; break;
-                 case 93: e.data.menuItem = "XVx OFS"; break;
-                 case 94: e.data.menuItem = "XVx ADR"; break;
-                 case 95: e.data.menuItem = "AF GAIN"; break;
-                 case 96: e.data.menuItem = "TX ESSB"; break;
-                 case 97: e.data.menuItem = "PSKR+PH"; break;
-                 case 98: e.data.menuItem = "VFO B->A"; break;
-                 case 99: e.data.menuItem = "AGC PLS"; break;
-
-                 case 100: e.data.menuItem = "RIT CLR"; break;
-                 case 101: e.data.menuItem = "TX GATE"; break;
-                 case 102: e.data.menuItem = "MEM 0-9"; break;
-                 case 103: e.data.menuItem = "PTT KEY"; break;
-                 case 104: e.data.menuItem = "VFO CRS"; break;
-                 case 105: e.data.menuItem = "AFX MD"; break;
-                 case 106: e.data.menuItem = "SIG RMV"; break;
-                 case 107: e.data.menuItem = "AFSK TX"; break;
-                 case 108: e.data.menuItem = "AGC DCY"; break;
-                 case 109: e.data.menuItem = "PB CTRL"; break;
-
-                 case 110: e.data.menuItem = "MACRO x"; break;
-                 case 111: e.data.menuItem = "L-MIX-R"; break;
-                 case 112: e.data.menuItem = "CW QRQ"; break;
-                 case 113: e.data.menuItem = "TX DVR"; break;
-                 case 114: e.data.menuItem = "TX MON"; break;
-                 case 115: e.data.menuItem = "DUAL PB"; break;
-                           
-                 default: e.data.menuItem = "Exit Menu";
-               };
+               e.data.menuItem = menuParameter()[menuItem];
             }},
     "MP":   {name:"menuParameter",
              description:"Menu param read/set", 
              parser: function(e){
                var menuItem = parseInt(e.raw.substr(2));
+               e.data.menuItem = menuParameter()[menuItem];
+
                switch(menuItem){
-                 case 0: e.data.menuItem = "ALARM"; break;
                  case 1: e.data.menuItem = "CW IAMBIC"; break;
 
-                 case 5: e.data.menuItem = "MSG RPT"; break;
-
-                 case 7: e.data.menuItem = "RPT OFS"; break;
-                 case 8: e.data.menuItem = "RX EQ"; break;
-                 case 9: e.data.menuItem = "TX EQ"; break;
-                 case 10: e.data.menuItem = "VOX GN"; break;
-                 
                  case 12: e.data.menuItem = "CW WGHT"; break;
-                 case 13: e.data.menuItem = "2 TONE"; break;
 
-                 case 18: e.data.menuItem = "FM MODE"; break;
-
-                 case 21: e.data.menuItem = "FM DEV"; break;
-                 
                  case 23: e.data.menuItem = "ATU MD"; break;
-                 case 24: e.data.menuItem = "BAT MIN"; break;
                  
-                 case 26: e.data.menuItem = "SER NUM"; break;
-                 
-                 case 28: e.data.menuItem = "FW REVS"; break;
-
-                 case 45: e.data.menuItem = "AUTOINF"; break;
-                 
-                 case 47: e.data.menuItem = "AF LIM"; break;
-
-                 case 52: e.data.menuItem = "LCD TST"; break;
-
-                 case 57: e.data.menuItem = "RS232"; break;
-                 case 58: e.data.menuItem = "TUN PWR"; break;
-
-                 case 60: e.data.menuItem = "SMTR MD"; break;
-
-                 case 62: e.data.menuItem = "REF CAL"; break;
-
-                 case 70: e.data.menuItem = "SW TEST"; break;
-                 case 71: e.data.menuItem = "SW TONE"; break;
-                 case 72: e.data.menuItem = "TECH MD"; break;
-                 case 73: e.data.menuItem = "TIME"; break;
-                 case 74: e.data.menuItem = "AGC THR"; break;
-
-                 case 76: e.data.menuItem = "BND MAP"; break;
-
-                 case 82: e.data.menuItem = "MIC BTN"; break;
-
-                 case 84: e.data.menuItem = "VFO CTS"; break;
-
-                 case 87: e.data.menuItem = "VFO OFS"; break;
                  case 88: e.data.menuItem = "WATTMTR"; break;
-                 case 89: e.data.menuItem = "XVx ON"; break;
-                 case 90: e.data.menuItem = "XVx RF"; break;
-                 case 91: e.data.menuItem = "XVx IF"; break;
-                 case 92: e.data.menuItem = "XVx PWR"; break;
-                 case 93: e.data.menuItem = "XVx OFS"; break;
-                 case 94: e.data.menuItem = "XVx ADR"; break;
                  
-                 case 96: e.data.menuItem = "TX ESSB"; break;
-
-                 case 101: e.data.menuItem = "TX GATE"; break;
-
-                 case 104: e.data.menuItem = "VFO CRS"; break;
-                 case 105: e.data.menuItem = "AFX MD"; break;
-
-                 case 110: e.data.menuItem = "MACRO x"; break;
-
                  case 120: e.data.menuItem = "CW KEY1"; break;
                  case 121: e.data.menuItem = "CW KEY2"; break;
                  case 122: e.data.menuItem = "VOX INH"; break;
@@ -915,6 +728,140 @@ function Elecraft(){
             }} 
   }
 
+  function menuParameter(){
+    return {
+      0: "ALARM",
+      1: "IAMBIC",
+      2: "LCD ADJ",
+      3: "LCD BRT",
+      4: "LED BRT",
+      5: "MSG RPT",
+      6: "PADDLE",
+      7: "RPT OFS",
+      8: "RX EQ",
+      9: "TX EQ",
+
+      10: "VOX GN",
+      11: "ANTIVOX",
+      12: "WEIGHT",
+      13: "2 TONE",
+      14: "AFV TIM",
+      15: "MIC+LIN",
+      16: "TX DLY",
+      17: "AGC SLP",
+      18: "FM MODE",
+      19: "DIGOUT1",
+
+      20: "AGC HLD",
+      21: "FM DEV",
+      22: "EXT ALC",
+      23: "KAT3",
+      24: "BAT MIN",
+      25: "TX INH",
+      26: "SER NUM",
+      27: "TXG VCE",
+      28: "FW REVS",
+      29: "DATE",
+
+      30: "DATE MD",
+      31: "DDS FRQ",
+      32: "LIN OUT",
+      33: "KIO3",
+      34: "ADC REF",
+      35: "RFI DET",
+      36: "KDVR3",
+      37: "AGC-S",
+      38: "FLx BW",
+      39: "FLx FRQ",
+
+      40: "FLx GN",
+      41: "FLx ON",
+      42: "FLTX md",
+      43: "FP TEMP",
+      44: "FSK POL",
+      45: "AUTOINF",
+      46: "KBPF3",
+      47: "AF LIM",
+      48: "KNB3",
+      49: "AF LIM",
+
+      50: "KRX3",
+      51: "KXV3",
+      52: "LCD TST",
+      53: "MIC SEL",
+      54: "NB SAVE",
+      55: "KPA3",
+      56: "PA TEMP",
+      57: "RS232",
+      58: "TUN PWR",
+      59: "SYNC DT",
+
+      60: "SMTR MD",
+      61: "AGC-F",
+      62: "REF CAL",
+      63: "SQ MIN",
+      64: "SQ SUB",
+      65: "SMTR OF",
+      66: "SMTR SC",
+      67: "SMTR PK",
+      68: "SPLT SV",
+      69: "SPKRS",
+
+      70: "SW TEST",
+      71: "SW TONE",
+      72: "TECH MD",
+      73: "TIME",
+      74: "AGC THR",
+      75: "PTT RLS",
+      76: "BND MAP",
+      77: "TTY LTR",
+      78: "TX ALC",
+      79: "TXGN pwr",
+
+      80: "SUB AF",
+      81: "PWR SET",
+      82: "MIC BTN",
+      83: "VCO MD",
+      84: "VFO CTS",
+      85: "VFO FST",
+      86: "VFO IND",
+      87: "VFO OFS",
+      88: "WMTR pwr",
+      89: "XVx ON",
+
+      90: "XVx RF",
+      91: "XVx IF",
+      92: "XVx PWR",
+      93: "XVx OFS",
+      94: "XVx ADR",
+      95: "AF GAIN",
+      96: "TX ESSB",
+      97: "PSKR+PH",
+      98: "VFO B->A",
+      99: "AGC PLS",
+
+      100: "RIT CLR",
+      101: "TX GATE",
+      102: "MEM 0-9",
+      103: "PTT KEY",
+      104: "VFO CRS",
+      105: "AFX MD",
+      106: "SIG RMV",
+      107: "AFSK TX",
+      108: "AGC DCY",
+      109: "PB CTRL",
+
+      110: "MACRO x",
+      111: "L-MIX-R",
+      112: "CW QRQ",
+      113: "TX DVR",
+      114: "TX MON",
+      115: "DUAL PB",
+
+      255: "EXIT MENU"
+    };
+  }
+
   function operatingMode(e){
     switch(e){
       case 1:
@@ -1021,22 +968,14 @@ function Elecraft(){
     if( e.raw[2] == '$' )
       val = parseInt(e.raw.substr(3));
 
-    switch( val ){
-      case 6:
-        e.data.sMeter = "S9";
-        break;
-      case 9:
-        e.data.sMeter = "S9+20";
-        break;
-      case 12:
-        e.data.sMeter = "S9+40";
-        break;
-      case 15:
-        e.data.sMeter = "S9+60";
-        break;
-      default:
-        e.data.sMeter = val;
-    }
+    var values = {
+      6:  "S9",
+      9:  "S9+20",
+      12: "S9+40",
+      15: "S9+60"
+    };
+
+    e.data.sMeter = values[val] || val;
   }
 
 }
